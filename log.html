@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="style/flat-ui.css">
+<link href='http://fonts.googleapis.com/css?family=Fenix' rel='stylesheet' type='text/css'>
+<style>
+
+
+/*.bar {
+  fill: steelblue;
+}*/
+
+.bar:hover {
+  fill: #e74c3c;
+  pointer-event: cursor;
+}
+
+/*.axis {
+  font: 10px sans-serif;
+}*/
+
+text{
+  font-family: Fenix, sans-serif;
+  font-size: 14px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.switch, .mult{
+  position: absolute;
+  top: 30px;
+  left: 450px;
+  z-index: 30;
+}
+
+body{
+  font-family: Fenix;
+  font-size: 14;
+}
+
+#svg{
+  width: 640px;
+}
+
+</style>
+<body>
+<div id="bar">
+  <button class="switch btn btn-lg btn-info">log</button>
+  <button class="mult btn btn-lg btn-info" style="top: 90px">Rent Board Count</button>
+</div>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+var log = true,
+  large = true;
+
+d3.select(".switch").on("click", function(){
+  var it = d3.select(this);
+  log = !log;
+  it.html( (log) ? "log scale" : "linear scale");
+  logOrLine();
+});
+
+d3.select(".mult").on("click", function(){
+  var it = d3.select(this);
+  large = !large;
+  it.html( (large) ? "Rent Board Count" : "5x Rent Board Count");
+  largeOrSmall();
+});
+
+var blue = "#3498db",
+  red = "#e74c3c",
+  green = "#2ecc71"
+
+var margin = {top: 20, right: 20, bottom: 30, left: 60},
+    width = 620 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var yLog = d3.scale.log()
+    .range([height, 0]);
+
+var yLin = d3.scale.linear()
+    .range([height,0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(yLog)
+    .orient("left")
+    .tickFormat(function (d) {
+        return yLog.tickFormat(4,d3.format(",d"))(d)
+})
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var data = [
+  {key: "jobs created", val: 25000},
+  {key: "housing units permitted", val: 2500},
+  {key: "Ellis Act Evictions", val: 156}
+];
+
+x.domain(data.map(function(d) { return d.key; }));
+yLog.domain([1, d3.max(data, function(d) { return d.val; })]);
+yLin.domain([0, d3.max(data, function(d) { return d.val; })]);
+
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+var gYAxis = svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+
+var bars = svg.selectAll(".bar")
+    .data(data)
+  .enter().append("rect")
+    .attr("class", "bar")
+    .attr("x", function(d) { return x(d.key); })
+    .attr("width", x.rangeBand())
+    .attr("y", function(d) { return yLog(d.val); })
+    .attr("height", function(d) { return height - yLog(d.val); })
+    .attr("fill", green);
+
+function logOrLine(){
+
+  if(!log){
+
+    yAxis.scale(yLin)
+      .ticks(5)
+      .tickFormat(null);
+
+    gYAxis.transition()
+      .duration(400)
+      .call(yAxis);
+
+    d3.selectAll(".bar")
+      .transition()
+      .ease("bounce")
+      .duration(1000)
+      .attr("y", function(d) { return yLin(d.val); })
+      .attr("height", function(d) { return height - yLin(d.val); });
+
+  }else{
+
+    yAxis.scale(yLog)
+      .tickFormat(function (d) {
+          return yLog.tickFormat(4,d3.format(",d"))(d)
+      });
+
+    gYAxis.transition()
+      .ease("elastic")
+      .duration(700)
+      .call(yAxis);
+
+    d3.selectAll(".bar")
+      .transition()
+      .ease("elastic")
+      .duration(700)
+      .attr("y", function(d) { return yLog(d.val); })
+      .attr("height", function(d) { return height - yLog(d.val); });
+
+  }
+
+}
+
+function largeOrSmall(){
+
+  if(!large){
+
+    data[2].val = 600;
+    bars.data(data);
+    logOrLine();
+
+  }else{
+
+    data[2].val = 150;
+    bars.data(data);
+    logOrLine();
+
+  }
+
+}
+
+</script>
