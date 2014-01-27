@@ -1,1 +1,17 @@
-make the buttons into switches
+add y axis
+add labels for each city
+add dates on the bottom
+edit the data to divide by different things
+change class names
+
+parse the numbers to have commas in them
+make the bar along the side where 
+
+change the "permit" mentions to just "value" so you can also show home prices
+
+add:
+home prices
+jobs
+households
+
+..buttons to trigger "per x"
