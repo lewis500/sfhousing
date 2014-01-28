@@ -53,15 +53,16 @@ body{
 </style>
 <body ng-app="lineApp">
 <div ng-controller="mainCtrl">
-  <line-follow ng-repeat="which in cityNamesLoop" city="{{which.name}}"></line-follow>
-<!--   <line-follow city="San Francisco"></line-follow><line-follow city="Houston"></line-follow> -->
+  <line-follow ng-repeat="which in cityNamesLoop" city="which.name" data="permits[which.name]" date="date.val" color="color" ydomain = "ydomain.permits"></line-follow><br>
+  <line-follow ng-repeat="which in cityNamesLoop" city="which.name" data="prices[which.name]" date="date.val" color="color" ydomain="ydomain.prices"></line-follow>
+<!--   <br>
+  <line-follow ng-repeat="which in cityNamesLoop" city="which.name" data="data.prices[which.name]" date="date.val" color="color"></line-follow> -->
 </div>
 
 </body>
 <script src="http://d3js.org/d3.v3.js"></script>
 <script type="text/javascript" src="scripts/app.js"></script>
+<script type="text/javascript" src="scripts/dataService.js"></script>
 <script type="text/javascript" src="scripts/lineFollow.js"></script>
-<!-- <script type="text/javascript" src="data/permits.js"></script> -->
-<!-- <script type="text/javascript" src="scripts/line.js"></script> -->
 
 

@@ -14,4 +14,10 @@ home prices
 jobs
 households
 
+format the numbers
+
 ..buttons to trigger "per x"
+
+
+conversion...
+make the domains get passed in somehow

@@ -1,40 +1,42 @@
-app.directive('lineFollow', ['permitData', function(permitData){
-
-	var margin = {top: 20, right: 0, bottom: 30, left: 0},
-	    width = 100 - margin.left - margin.right,
-	    height = 250 - margin.top - margin.bottom;
-
-    var x = d3.time.scale()
-        .range([0, width])
-        .domain([
-	  		new Date("2002-010-01"),
-	  		new Date("2013-10-01")
-	  	]);
-
-    var xBackwards = d3.scale.linear().domain(x.range()).range([x.range()[0],x.range()[1]-28]);
-
-    var y = d3.scale.linear()
-        .range([height, 0])
-        .domain([0,7000]);
-
-    var color = d3.scale.category10()
-    		.domain(permitData.cityNames);
-
-    var bisect = d3.bisector(function(d) { return d.date; }).left;
-
-    var area = d3.svg.area()
-        .x(function(d) { return x(d.date); })
-        .y1(function(d) { return y(d.permits); })
-        .y0(height);
-
-    var line = d3.svg.line()
-        .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.permits); });
-
+app.directive('lineFollow', function(){
 
 	return {
+		scope: {
+			city: "=",
+			date: "=",
+			data: "=",
+			color: "=",
+			ydomain: "="
+		},
 		restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
 		link: function(scope, el, attr) {
+
+				var margin = {top: 20, right: 0, bottom: 30, left: 0},
+				    width = 100 - margin.left - margin.right,
+				    height = 250 - margin.top - margin.bottom;
+
+			  var x = d3.time.scale()
+			      .range([0, width])
+			      .domain([
+			  		new Date("2002-10-01"),
+			  		new Date("2013-12-01")
+			  	]);
+
+			  var xBackwards = d3.scale.linear().domain(x.range());
+
+			  var y = d3.scale.linear()
+			      .range([height, 0])
+
+			  var bisect = d3.bisector(function(d) { return d.date; }).left;
+
+			  var area = d3.svg.area()
+			      .x(function(d) { return x(d.date); })
+			      .y1(function(d) { return y(d.val); })
+			      .y0(height);
+
+			  var line = d3.svg.line()
+			      .x(function(d) { return x(d.date); })
+			      .y(function(d) { return y(d.val); });
 
 			// set up initial svg object
 			var svg = d3.select(el[0]).append("svg")
@@ -43,9 +45,11 @@ app.directive('lineFollow', ['permitData', function(permitData){
 			  .append("g")
 			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-			var city = attr.city;
+			y.domain(scope.ydomain);
+
+			var city = scope.city;
 			
-			var data = scope.cities[city];
+			var data = scope.data;
 
 			var xLine = svg.append("g")
 			    .attr("class", "g-x g-axis")
@@ -61,7 +65,7 @@ app.directive('lineFollow', ['permitData', function(permitData){
       		.datum(data)
           .attr("class", "area")
           .attr("d", area)
-          .style("fill", color(city));
+          .style("fill", scope.color(city));
 
       svg.append("path")
       		.datum(data)
@@ -72,30 +76,29 @@ app.directive('lineFollow', ['permitData', function(permitData){
           .attr("class", "dot");
 
         circle.append("circle")
-        	.attr("r",3)
-          // .attr("fill","#000");
+        	.attr("r",3);
 
       var textLabel = svg.append("text")
       	.attr("class", "number")
       	.attr("dy","-1.1em");
 
-      scope.$watch('date', function(newDate){
+      scope.$watch('date.val', function(newDate){
 
       	var i = bisect(data, newDate, 0, data.length - 1),
       		j = Math.round(i / (data.length - 1) * (data.length - 14)),
 					v = data[i],
 					newX = x(v.date),
-					newY = y(v.permits),
-					newYText = y(d3.max(data.slice(j, j + 14), function(d) { return d.permits; }));
+					newY = y(v.val),
+					newYText = y(d3.max(data.slice(j, j + 14), function(d) { return d.val; }));
 
       	circle.attr("transform", function(){ 
       		return "translate(" + newX + "," + newY + ")"; 
       	});
 
-      	textLabel.text(v.permits)
+      	textLabel.text(v.val)
       		.attr("transform", function(){
 	      			return "translate("
-	      				+ xBackwards(newX) + ","  
+	      				+ xBackwards.range([x.range()[0],x.range()[1]-this.getComputedTextLength()])(newX) + ","
 	      				+ newYText + ")";
 		      	}
       		);
@@ -108,10 +111,12 @@ app.directive('lineFollow', ['permitData', function(permitData){
           .attr("width", width)
           .attr("height", height)
           .on("mousemove", function(){
-          	scope.update( x.invert(d3.mouse(this)[0]) );
+          	var q = x.invert(d3.mouse(this)[0]);
+          	scope.$apply( 
+          		scope.date.val = q
+          		);
           });
-
 
 		}
 	};
-}]);
+});
