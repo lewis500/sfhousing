@@ -42,7 +42,7 @@ body{
 
 .area {
   /*fill: #000;*/
-  fill-opacity: 0.2;
+  fill-opacity: 0;
 }
 
 .number{
@@ -50,11 +50,61 @@ body{
   font-size: 13px;
 }
 
+h4{
+  text-align: center;
+}
+
+.fakeBG{
+    opacity: 0.1;
+    top: 15%;
+    left: 5px;
+    width: 90px;
+    height: 90%;
+    bottom: 0;
+    right: -5px;
+    position: absolute;
+    z-index: -1;   
+}
+
+.rowtitle{
+  position: relative;
+
+  /* Safari */
+  -webkit-transform: rotate(-90deg);
+
+  /* Firefox */
+  -moz-transform: rotate(-90deg);
+
+  /* IE */
+  -ms-transform: rotate(-90deg);
+
+  /* Opera */
+  -o-transform: rotate(-90deg);
+
+  /* Internet Explorer */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  /*margin-top: 100px;*/
+}
+
 </style>
 <body ng-app="lineApp">
 <div ng-controller="mainCtrl">
-  <line-follow ng-repeat="which in cityNamesLoop" city="which.name" data="permits[which.name]" date="date.val" color="color" ydomain = "ydomain.permits"></line-follow><br>
-  <line-follow ng-repeat="which in cityNamesLoop" city="which.name" data="prices[which.name]" date="date.val" color="color" ydomain="ydomain.prices"></line-follow>
+  
+  <div style="display: inline-block; position: relative; width:20px;">
+    <div class= "rowtitle" style="top: -150px"><h4>Permits</h4></div>
+    <br>
+    <div class= "rowtitle" style="top:-50px"><h4>Prices</h4></div>
+  </div>
+  <div style="display: inline-block;">
+    <div ng-repeat="which in cityNamesLoop" style="width: 100px; display: inline-block; position: relative" >
+      <div class="fakeBG" style="background-color: {{color(which.name)}};" ></div>
+      <h4>{{which.name}}</h4>
+      <line-follow city="which.name" first= "{{$first}}" date="date.val" color="color" specs="specs.permits"></line-follow>
+      <line-follow city="which.name" first= "{{$first}}" date="date.val" color="color" specs="specs.prices"></line-follow>
+    </div>
+  </div>
+<!--   <line-follow ng-repeat="which in cityNamesLoop" city="which.name" date="date.val" color="color" specs ="specs.permits"></line-follow><br>
+  <line-follow ng-repeat="which in cityNamesLoop" city="which.name" date="date.val" color="color" specs ="specs.prices"></line-follow> -->
 <!--   <br>
   <line-follow ng-repeat="which in cityNamesLoop" city="which.name" data="data.prices[which.name]" date="date.val" color="color"></line-follow> -->
 </div>

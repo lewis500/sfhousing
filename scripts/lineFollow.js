@@ -4,16 +4,16 @@ app.directive('lineFollow', function(){
 		scope: {
 			city: "=",
 			date: "=",
-			data: "=",
 			color: "=",
-			ydomain: "="
+			specs: "=",
+			first: "@"
 		},
 		restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
 		link: function(scope, el, attr) {
 
-				var margin = {top: 20, right: 0, bottom: 30, left: 0},
+				var margin = {top: 35, right: 10, bottom: 5, left: 10},
 				    width = 100 - margin.left - margin.right,
-				    height = 250 - margin.top - margin.bottom;
+				    height = 150 - margin.top - margin.bottom;
 
 			  var x = d3.time.scale()
 			      .range([0, width])
@@ -45,11 +45,28 @@ app.directive('lineFollow', function(){
 			  .append("g")
 			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-			y.domain(scope.ydomain);
+			// if(scope.first=="true"){
+				
+			// 	var yAxis = d3.svg.axis()
+			// 	    .scale(y)
+			// 	    .orient("left");
 
-			var city = scope.city;
-			
-			var data = scope.data;
+			// 	svg.append("g")
+			// 	    .attr("class", "y axis")
+			// 	    .call(yAxis)
+			// 	  .append("text")
+			// 	    .attr("transform", "rotate(-90)")
+			// 	    .attr("y", 6)
+			// 	    .attr("dy", ".71em")
+			// 	    .style("text-anchor", "end")
+			// 	    .text("Price ($)")
+			// }
+
+			y.domain(scope.specs.ydomain);
+
+			var city = scope.city
+				, data = scope.specs.data[city]
+				, format = scope.specs.format;
 
 			var xLine = svg.append("g")
 			    .attr("class", "g-x g-axis")
@@ -82,6 +99,8 @@ app.directive('lineFollow', function(){
       	.attr("class", "number")
       	.attr("dy","-1.1em");
 
+      var toStretch = data.length *0.1;
+
       scope.$watch('date.val', function(newDate){
 
       	var i = bisect(data, newDate, 0, data.length - 1),
@@ -95,7 +114,7 @@ app.directive('lineFollow', function(){
       		return "translate(" + newX + "," + newY + ")"; 
       	});
 
-      	textLabel.text(v.val)
+      	textLabel.text(format(v.val))
       		.attr("transform", function(){
 	      			return "translate("
 	      				+ xBackwards.range([x.range()[0],x.range()[1]-this.getComputedTextLength()])(newX) + ","
