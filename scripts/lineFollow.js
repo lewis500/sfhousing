@@ -6,19 +6,26 @@ app.directive('lineFollow', function(){
 			date: "=",
 			color: "=",
 			specs: "=",
-			first: "@"
+			first: "@",
+			bottom: "@"
 		},
 		restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
 		link: function(scope, el, attr) {
 
-				var margin = {top: 35, right: 10, bottom: 5, left: 10},
-				    width = 100 - margin.left - margin.right,
-				    height = 150 - margin.top - margin.bottom;
+
+				var margin = {top: 35, right: 10, bottom: 5, left: 10};
+
+				if(scope.first=='true') margin.left += 25;
+
+				var width = 100 - margin.left - margin.right,
+				    height = 175 - margin.top - margin.bottom;
+
+				if(scope.bottom == "true") height -= 10; margin.bottom +=10;
 
 			  var x = d3.time.scale()
 			      .range([0, width])
 			      .domain([
-			  		new Date("2002-10-01"),
+			  		new Date("1997-07-01"),
 			  		new Date("2013-12-01")
 			  	]);
 
@@ -29,14 +36,12 @@ app.directive('lineFollow', function(){
 
 			  var bisect = d3.bisector(function(d) { return d.date; }).left;
 
-			  var area = d3.svg.area()
-			      .x(function(d) { return x(d.date); })
-			      .y1(function(d) { return y(d.val); })
-			      .y0(height);
 
 			  var line = d3.svg.line()
 			      .x(function(d) { return x(d.date); })
 			      .y(function(d) { return y(d.val); });
+
+
 
 			// set up initial svg object
 			var svg = d3.select(el[0]).append("svg")
@@ -45,22 +50,23 @@ app.directive('lineFollow', function(){
 			  .append("g")
 			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-			// if(scope.first=="true"){
-				
-			// 	var yAxis = d3.svg.axis()
-			// 	    .scale(y)
-			// 	    .orient("left");
+			if(scope.first=="true"){
+				var yAxis = d3.svg.axis()
+				    .scale(y)
+				    .orient("left");
 
-			// 	svg.append("g")
-			// 	    .attr("class", "y axis")
-			// 	    .call(yAxis)
-			// 	  .append("text")
-			// 	    .attr("transform", "rotate(-90)")
-			// 	    .attr("y", 6)
-			// 	    .attr("dy", ".71em")
-			// 	    .style("text-anchor", "end")
-			// 	    .text("Price ($)")
-			// }
+				svg.append("g")
+				    .attr("class", "y axis")
+				    .call(yAxis)
+				  .append("text")
+				    .attr("transform", "rotate(-90)")
+				    .attr("y", -25)
+				    .attr("dy", ".71em")
+				    .attr("font-size","13px")
+				    .style("text-anchor", "end")
+				    .text(scope.specs.label);
+			}
+
 
 			y.domain(scope.specs.ydomain);
 
@@ -80,12 +86,6 @@ app.directive('lineFollow', function(){
 
       svg.append("path")
       		.datum(data)
-          .attr("class", "area")
-          .attr("d", area)
-          .style("fill", scope.color(city));
-
-      svg.append("path")
-      		.datum(data)
           .attr("class", "line")
           .attr("d", line);
 
@@ -99,16 +99,21 @@ app.directive('lineFollow', function(){
       	.attr("class", "number")
       	.attr("dy","-1.1em");
 
-      var toStretch = data.length *0.1;
+      var year =	svg.append("text")
+      	    .attr("class", "number")
+      	    .attr("dy", "1em")
+      	    .style("opacity", scope.bottom == "true" ? 1 : 0);
+
+     	var stretch = Math.round(data.length *0.25)
 
       scope.$watch('date.val', function(newDate){
 
       	var i = bisect(data, newDate, 0, data.length - 1),
-      		j = Math.round(i / (data.length - 1) * (data.length - 14)),
+      		j = Math.round(i / (data.length - 1) * (data.length - stretch)),
 					v = data[i],
 					newX = x(v.date),
 					newY = y(v.val),
-					newYText = y(d3.max(data.slice(j, j + 14), function(d) { return d.val; }));
+					newYText = y(d3.max(data.slice(j, j + stretch), function(d) { return d.val; }));
 
       	circle.attr("transform", function(){ 
       		return "translate(" + newX + "," + newY + ")"; 
@@ -122,13 +127,22 @@ app.directive('lineFollow', function(){
 		      	}
       		);
 
+      		year.text(v.date.getFullYear())
+      		.attr("transform", function(){
+	      			return "translate("
+	      				+ xBackwards.range([x.range()[0],x.range()[1]-this.getComputedTextLength()])(newX) + ","
+	      				+ height + ")";
+		      	}
+      		);
+
       });
 
       svg.append("rect")
           .attr("class", "overlay")
           .attr("x", -4)
+          .attr("y",-margin.top)
           .attr("width", width)
-          .attr("height", height)
+          .attr("height", height + margin.top + margin.bottom)
           .on("mousemove", function(){
           	var q = x.invert(d3.mouse(this)[0]);
           	scope.$apply( 

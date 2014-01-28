@@ -23,12 +23,15 @@ app.controller('mainCtrl',["$scope", "data", function($scope, dat){
 		prices: {
 			ydomain: [0,700000],
 			format: d3.format("$.3s") ,
-			data: dat.prices
+			data: dat.prices,
+			label: "Median Home Price"
 		}
 		, permits: {
-			ydomain: [0,7000],
+			ydomain: [0,6500],
 			format: d3.format(".2s"),
-			data: dat.permits
+			data: dat.permits,
+			label: "Housing Permits Issued"
+
 		}
 	};
 
