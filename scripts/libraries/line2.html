@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link href='http://fonts.googleapis.com/css?family=Fenix' rel='stylesheet' type='text/css'>
+<style>
+
+body{
+  font-family: Fenix, serif;
+  /*font-size: 11;*/
+}
+
+
+</style>
+
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="scripts/libraries/dimple.js"></script>
+<body >
+
+<div id="chartContainer">
+
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v1.1.4.min.js"></script>
+  <script type="text/javascript">
+
+  var rawData = [{"Year":1992,"Units Completed from New Construction":767,"Units Demolished":-76,"Units Gained or Lost from Alterations":34},
+  {"Year":1993,"Units Completed from New Construction":379,"Units Demolished":-26,"Units Gained or Lost from Alterations":-65},
+  {"Year":1994,"Units Completed from New Construction":1234,"Units Demolished":-25,"Units Gained or Lost from Alterations":-23},
+  {"Year":1995,"Units Completed from New Construction":532,"Units Demolished":-55,"Units Gained or Lost from Alterations":-76},
+  {"Year":1996,"Units Completed from New Construction":909,"Units Demolished":-278,"Units Gained or Lost from Alterations":52},
+  {"Year":1997,"Units Completed from New Construction":906,"Units Demolished":-344,"Units Gained or Lost from Alterations":163},
+  {"Year":1998,"Units Completed from New Construction":909,"Units Demolished":-54,"Units Gained or Lost from Alterations":19},
+  {"Year":1999,"Units Completed from New Construction":1225,"Units Demolished":-98,"Units Gained or Lost from Alterations":158},
+  {"Year":2000,"Units Completed from New Construction":1859,"Units Demolished":-61,"Units Gained or Lost from Alterations":-1},
+  {"Year":2001,"Units Completed from New Construction":1619,"Units Demolished":-99,"Units Gained or Lost from Alterations":259},
+  {"Year":2002,"Units Completed from New Construction":2260,"Units Demolished":-73,"Units Gained or Lost from Alterations":221},
+  {"Year":2003,"Units Completed from New Construction":2730,"Units Demolished":-286,"Units Gained or Lost from Alterations":52},
+  {"Year":2004,"Units Completed from New Construction":1780,"Units Demolished":-355,"Units Gained or Lost from Alterations":62},
+  {"Year":2005,"Units Completed from New Construction":1872,"Units Demolished":-174,"Units Gained or Lost from Alterations":157},
+  {"Year":2006,"Units Completed from New Construction":1675,"Units Demolished":-41,"Units Gained or Lost from Alterations":280},
+  {"Year":2007,"Units Completed from New Construction":2197,"Units Demolished":-81,"Units Gained or Lost from Alterations":451},
+  {"Year":2008,"Units Completed from New Construction":3019,"Units Demolished":-29,"Units Gained or Lost from Alterations":273},
+  {"Year":2009,"Units Completed from New Construction":3366,"Units Demolished":-29,"Units Gained or Lost from Alterations":117},
+  {"Year":2010,"Units Completed from New Construction":1082,"Units Demolished":-170,"Units Gained or Lost from Alterations":318},
+  {"Year":2011,"Units Completed from New Construction":348,"Units Demolished":-84,"Units Gained or Lost from Alterations":5}];
+
+  var data =[];
+
+  rawData.forEach(function(d){
+    d.each(function(val, key){
+      if(key!= "Year"){
+        data.append({
+          date: d.Year,
+          key: key,
+          val: val
+        });
+      }
+    })
+  });
+
+  console.log(data);
+
+  var svg = dimple.newSvg("#chartContainer", 590, 400);
+
+    // data = dimple.filterData(rawData, "Owner", ["Aperture", "Black Mesa"])
+    var myChart = new dimple.chart(svg, data);
+    myChart.setBounds(60, 30, 505, 305);
+    var x = myChart.addCategoryAxis("x", "Year");
+    x.addOrderRule("Date");
+    myChart.addMeasureAxis("y", "Housing Units");
+    myChart.addSeries("Channel", dimple.plot.area);
+    myChart.addLegend(60, 10, 500, 20, "right");
+    myChart.draw();
+
+
+  </script>
+
+</div>
+
+</body>
+
+

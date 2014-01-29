@@ -1,0 +1,18 @@
+Over the past six months, San Francisco has appeared in the national spotlight for its high cost of living. Rising home and rental prices have spawned coverage and editorials in Bloomberg, Wall Street Journal, New York Times and the Atlantic. The consensus seems to be that San Francisco needs to building more housing, that permitting and land use regulations have kept supply from keeping up with demand. Ed Glaeser, Professor of Economics at Harvard University, has spent years studying just how significantly land use controls have influenced where Americans live and how much they pay in housing costs, and he recently wrote in a New York Times op-ed: "The best way to make cities more affordable is to reduce the barriers to building and unleash the cranes." 
+
+Recently, Mayor Ed Lee is putting this consensus partly into practice. On January 17th, Lee announced that the city would speed up permitting and development enough to build 30,000 units over the next 6 years...an average of 5,000 per year. This is certainly a much faster rate than San Francisco has been building housing.
+
+net change chart for SF
+
+Will it have an impact, though? 30,000 sounds like a big number, but bear in mind San Francisco already has about 380,000 housing units, so over six years it only means a 1% annual rate of growth. The projected 5,000 units per year is 25% less than the 6,600 units that the City of Seattle permitted in 2013. Meanwhile, in 2012, San Francisco added 25,000 jobs.
+
+mathjax for 1% growth
+
+Graph of 380,000 to 410,000
+
+Another issue you hear a lot about is the Ellis Act, which allows landlords to evict tenants and convert their apartments to "Tenancy-In-Common" condiminium complexes. Ellis Act evictions can certainly be heartwrenching, but there are so few that it is impossible they influence housing prices. 
+
+bar chart
+
+The thing to remember is that San Francisco is part of a metropolitan area, and the dozens of cities overlap in one giant market for living space. On the chart below, you'll see the San Francisco-Oakland-Fremont Metropolitan Statitical Area (MSA) compared to other MSA's around the country. San Francisco and Boston are metros that restrict construction and have seen huge price rises. Dallas and Charlotte don't subsantially restrict construction and have stable, low housing prices. Finally, Seattle and Portland are metros with heavy land use regulation (both have urban growth coundaries) but enough construction to temper housing prices.
+

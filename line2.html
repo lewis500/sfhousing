@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link href='http://fonts.googleapis.com/css?family=Fenix' rel='stylesheet' type='text/css'>
+<style>
+
+body{
+  font-family: Fenix, serif;
+  font-size: 11;
+}
+
+
+</style>
+
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="scripts/libraries/dimple.js"></script>
+<script src="scripts/libraries/underscore.js"></script>
+<body >
+
+<div id="chartContainer">
+
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="scripts/libraries/dimple.js"></script>
+  <script type="text/javascript">
+
+  var rawData = [{"Year":1992,"New Construction":767,"Demolished":-76,"Alterations":34},
+  {"Year":1993,"New Construction":379,"Demolished":-26,"Alterations":-65},
+  {"Year":1994,"New Construction":1234,"Demolished":-25,"Alterations":-23},
+  {"Year":1995,"New Construction":532,"Demolished":-55,"Alterations":-76},
+  {"Year":1996,"New Construction":909,"Demolished":-278,"Alterations":52},
+  {"Year":1997,"New Construction":906,"Demolished":-344,"Alterations":163},
+  {"Year":1998,"New Construction":909,"Demolished":-54,"Alterations":19},
+  {"Year":1999,"New Construction":1225,"Demolished":-98,"Alterations":158},
+  {"Year":2000,"New Construction":1859,"Demolished":-61,"Alterations":-1},
+  {"Year":2001,"New Construction":1619,"Demolished":-99,"Alterations":259},
+  {"Year":2002,"New Construction":2260,"Demolished":-73,"Alterations":221},
+  {"Year":2003,"New Construction":2730,"Demolished":-286,"Alterations":52},
+  {"Year":2004,"New Construction":1780,"Demolished":-355,"Alterations":62},
+  {"Year":2005,"New Construction":1872,"Demolished":-174,"Alterations":157},
+  {"Year":2006,"New Construction":1675,"Demolished":-41,"Alterations":280},
+  {"Year":2007,"New Construction":2197,"Demolished":-81,"Alterations":451},
+  {"Year":2008,"New Construction":3019,"Demolished":-29,"Alterations":273},
+  {"Year":2009,"New Construction":3366,"Demolished":-29,"Alterations":117},
+  {"Year":2010,"New Construction":1082,"Demolished":-170,"Alterations":318},
+  {"Year":2011,"New Construction":348,"Demolished":-84,"Alterations":5}];
+
+  var totalData = [{"Date":1992,"Net Change":725},
+    {"Date":1993,"Net Change":288},
+    {"Date":1994,"Net Change":1186},
+    {"Date":1995,"Net Change":401},
+    {"Date":1996,"Net Change":683},
+    {"Date":1997,"Net Change":725},
+    {"Date":1998,"Net Change":874},
+    {"Date":1999,"Net Change":1285},
+    {"Date":2000,"Net Change":1797},
+    {"Date":2001,"Net Change":1779},
+    {"Date":2002,"Net Change":2408},
+    {"Date":2003,"Net Change":2496},
+    {"Date":2004,"Net Change":1487},
+    {"Date":2005,"Net Change":1855},
+    {"Date":2006,"Net Change":1914},
+    {"Date":2007,"Net Change":2567},
+    {"Date":2008,"Net Change":3263},
+    {"Date":2009,"Net Change":3454},
+    {"Date":2010,"Net Change":1230},
+    {"Date":2011,"Net Change":269}]
+  var data =[];
+
+  rawData.forEach(function(d){
+    _.each(d, function(val, key){
+      if(key!== "Year"){
+        data.unshift({
+          Date: d.Year,
+          source: key,
+          "Housing Units": val
+        });
+      }
+    })
+  });
+
+
+  function stackedBar(){
+    var svg = dimple.newSvg("#chartContainer", 590, 400);
+    // data = dimple.filterData(rawData, "Owner", ["Aperture", "Black Mesa"])
+    var myChart = new dimple.chart(svg, data);
+    myChart.setBounds(60, 30, 505, 330);
+    var x = myChart.addCategoryAxis("x", "Date");
+    x.addOrderRule("Date");
+    var y = myChart.addMeasureAxis("y", "Housing Units");
+    y.tickFormat = "g,"
+    myChart.addSeries("source", dimple.plot.bar);
+    var leg = myChart.addLegend(60, 20, 150, 50, "right");
+    // leg.width = 400;
+    myChart.draw();
+    x.titleShape.remove();
+  }
+
+  stackedBar();
+
+  function lineTotal(){
+
+        var svg = dimple.newSvg("#chartContainer", 590, 210);
+        d3.tsv("/data/example_data.tsv", function (data) {
+          var myChart = new dimple.chart(svg, totalData);
+          myChart.setBounds(60, 15, 505, 140);
+          var x = myChart.addCategoryAxis("x", "Date");
+          x.addOrderRule("Date");
+          var y = myChart.addMeasureAxis("y", "Net Change");
+          y.tickFormat = "g,"
+          var s = myChart.addSeries(null, dimple.plot.line);
+          myChart.draw();
+          x.titleShape.remove();
+        });
+  }
+
+        lineTotal();
+
+    // x.shapes.selectAll("text").attr("transform","rotate(-90)");
+
+  </script>
+
+</div>
+
+</body>
+
+
