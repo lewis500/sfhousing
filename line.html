@@ -82,7 +82,7 @@ h4{
   
   <div style="display: inline-block;">
     <div ng-repeat="which in cityNamesLoop" ng-style="{width: $first? '125px': '100px'}" style=" display: inline-block; position: relative" >
-      <div class="fakeBG" style="background-color: {{color(which.name)}};" ></div>
+      <div class="fakeBG" style="background-color: {{color(which.name)}};"></div> <!-- the color -->
       <h4>{{which.name}}</h4>
       <line-follow city="which.name" first= "{{$first}}" date="date.val" color="color" specs="specs.permits" bottom="false"></line-follow>
       <line-follow city="which.name" first= "{{$first}}" date="date.val" color="color" specs="specs.prices" bottom="true"></line-follow>

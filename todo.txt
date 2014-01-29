@@ -1,3 +1,6 @@
 replace houston with dallas
 replace san diego with charlotte
 replace los angeles with boston
+
+create a directive for the y axis
+clean out the directive that I have

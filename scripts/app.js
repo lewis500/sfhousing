@@ -22,7 +22,7 @@ app.controller('mainCtrl',["$scope", "data", function($scope, dat){
 	$scope.specs = {
 		prices: {
 			ydomain: [0,700000],
-			format: d3.format("$.3s") ,
+			format: d3.format("$.3s"),
 			data: dat.prices,
 			label: "Median Home Price"
 		}

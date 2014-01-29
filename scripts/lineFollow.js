@@ -41,8 +41,6 @@ app.directive('lineFollow', function(){
 			      .x(function(d) { return x(d.date); })
 			      .y(function(d) { return y(d.val); });
 
-
-
 			// set up initial svg object
 			var svg = d3.select(el[0]).append("svg")
 			    .attr("width", width + margin.left + margin.right)
