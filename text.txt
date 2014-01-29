@@ -4,11 +4,9 @@ Recently, Mayor Ed Lee is putting this consensus partly into practice. On Januar
 
 net change chart for SF
 
-Will it have an impact, though? 30,000 sounds like a big number, but bear in mind San Francisco already has about 380,000 housing units, so over six years it only means a 1% annual rate of growth. The projected 5,000 units per year is 25% less than the 6,600 units that the City of Seattle permitted in 2013. Meanwhile, in 2012, San Francisco added 25,000 jobs.
+Will it have an impact, though? 30,000 sounds like a big number, but bear in mind San Francisco already has about 378,000 housing units, so over six years it only means a 1.2% annual rate of growth. The projected 5,000 units per year amounts to just three quarters of the 6,600 units  built in the City of Seattle in 2013.
 
 mathjax for 1% growth
-
-Graph of 380,000 to 410,000
 
 Another issue you hear a lot about is the Ellis Act, which allows landlords to evict tenants and convert their apartments to "Tenancy-In-Common" condiminium complexes. Ellis Act evictions can certainly be heartwrenching, but there are so few that it is impossible they influence housing prices. 
 

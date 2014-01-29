@@ -4157,6 +4157,7 @@ var dimple = {
             } else if (series.y.measure !== null && series.y.measure !== undefined) {
                 returnHeight = Math.abs(series.y._scale(d.y) - series.y._scale((d.y <= 0 ? d.y + d.height : d.y - d.height)));
             } else {
+                // returnHeight = series.y._scale.range()[1];
                 returnHeight = d.height * ((chart._heightPixels() / series.y._max) - (dimple._helpers.yGap(chart, series) * 2)) - (dimple._helpers.yClusterGap(d, chart, series) * 2);
             }
             return returnHeight;

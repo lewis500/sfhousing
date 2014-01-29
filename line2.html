@@ -84,13 +84,12 @@ h4{
       if(key!== "Year"){
         data.unshift({
           Date: d.Year,
-          source: key,
+          Source: key,
           "Housing Units": val
         });
       }
     })
   });
-
 
   function stackedBar(){
     var svg = dimple.newSvg("#chartContainer", 590, 400);
@@ -101,14 +100,13 @@ h4{
     x.addOrderRule("Date");
     var y = myChart.addMeasureAxis("y", "Housing Units");
     y.tickFormat = ",g"
-    myChart.addSeries("source", dimple.plot.bar);
+    myChart.addSeries("Source", dimple.plot.bar);
     var leg = myChart.addLegend(75, 25, 150, 50, "right");
     // leg.width = 400;
     myChart.draw();
     x.titleShape.remove();
   }
 
-  stackedBar();
 
   function lineTotal(){
 
@@ -119,12 +117,14 @@ h4{
     x.addOrderRule("Date");
     var y = myChart.addMeasureAxis("y", "Net Change");
     y.tickFormat = ",g"
-    var s = myChart.addSeries(null, dimple.plot.line);
+    var s = myChart.addSeries(null, dimple.plot.area);
     myChart.draw();
     x.titleShape.remove();
 
   }
 
+  //implement
+  stackedBar();
   lineTotal();
 
   </script>

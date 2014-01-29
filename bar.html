@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link href='http://fonts.googleapis.com/css?family=Fenix' rel='stylesheet' type='text/css'>
+<style>
+
+body{
+  font-family: Fenix, serif;
+  font-size: 13px;
+}
+
+h4{
+  margin-bottom: 0px;
+  text-align: center;
+}
+
+#main{
+  width: 620px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.y .tick line, path{
+    stroke: lightgrey;
+    opacity: 0.7;
+}
+.grid path {
+      stroke-width: 0;
+}
+
+/*.x.axis path {
+  display: none;
+}*/
+
+.line {
+  fill: none;
+  stroke: #6b94b0;
+  stroke-width: 2px;
+  opacity: 0.8;
+}
+
+</style>
+
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="scripts/libraries/dimple.js"></script>
+<script src="scripts/libraries/underscore.js"></script>
+<body>
+<div id="main">
+  <h4>Sources of Housing Creation and Destruction</h4>
+  <div id="chartContainer"></div>
+  <h4>Net Change in Housing Units</h4>
+  <div id ="chartContainer2"></div>
+</div>
+
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="scripts/libraries/dimple.js"></script>
+  <script type="text/javascript">
+
+  var data = [{"date":2013,"Total":378424,"Projected":378424},
+{"date":2014,"Total":383424,"Projected":383344},
+{"date":2015,"Total":388424,"Projected":388327},
+{"date":2016,"Total":393424,"Projected":393375},
+{"date":2017,"Total":398424,"Projected":398489},
+{"date":2018,"Total":403424,"Projected":403669},
+{"date":2019,"Total":408424,"Projected":408917},
+{"date":2020,"Total":413424,"Projected":414233}]
+
+
+  var margin = {top: 20, right: 20, bottom: 30, left: 80},
+      width = 590 - margin.left - margin.right,
+      height = 300 - margin.top - margin.bottom;
+
+  var x = d3.scale.linear()
+      .range([0, width]);
+
+  var y = d3.scale.linear()
+      .range([height, 0]);
+
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+      .tickFormat(d3.format("g"));
+
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left")
+      .tickFormat(d3.format("s.1"))
+      .tickSize(-width);
+
+  var line = d3.svg.line()
+      .x(function(d) { return x(d.date); })
+      .y(function(d) { return y(d.Total); });
+
+  var line2 = d3.svg.line()
+      .x(function(d) { return x(d.date); })
+      .y(function(d) { return y(d.Projected); });
+
+  var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    data.forEach(function(d) {
+      d.date = +d.date;
+    });
+
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain(d3.extent(data, function(d) { return d.Total; }));
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+      .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -75 + "px")
+        .attr("dy", "-3.8em")
+        .style("text-anchor", "end")
+        .text("Housing Units");
+
+    svg.append("path")
+        .datum(data)
+        .attr("class", "line")
+        .attr("d", line);
+
+    svg.append("path")
+        .datum(data)
+        .attr("class","line")
+        .attr("d", line2)
+
+
+  </script>
+
+</body>
+
+
