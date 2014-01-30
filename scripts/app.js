@@ -12,20 +12,24 @@ app.controller('mainCtrl',["$scope", "data", function($scope, dat){
 		};
 	});
 
-	console.log(dat.profiles)
+	// console.log(dat.profiles)
 
 	$scope.color = 	d3.scale.category10()
 			.domain(cityNames);
 
+	$scope.per = {
+		truth: false
+	}
+
 	$scope.specs = {
 		prices: {
 			ydomain: [0,700000],
-			ydomain2: [0,200],
 			format: d3.format("$.3s"),
 			data: dat.prices
 		}
 		, permits: {
 			ydomain: [0,7500],
+			ydomain2: [0,200],
 			format: d3.format(".2s"),
 			data: dat.permits
 		}
