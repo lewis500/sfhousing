@@ -4,18 +4,17 @@ app.directive('lineFollow', function(){
 		scope: {
 			city: "=",
 			date: "=",
-			color: "=",
 			specs: "=",
-			first: "@",
 			bottom: "@"
 		},
 		restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
 		link: function(scope, el, attr) {
 
+			var city = scope.city
+				, data = scope.specs.data[city]
+				, format = scope.specs.format;
 
 				var margin = {top: 35, right: 10, bottom: 5, left: 10};
-
-				if(scope.first=='true') margin.left += 25;
 
 				var width = 100 - margin.left - margin.right,
 				    height = 175 - margin.top - margin.bottom;
@@ -33,9 +32,9 @@ app.directive('lineFollow', function(){
 
 			  var y = d3.scale.linear()
 			      .range([height, 0])
+			      .domain(scope.specs.ydomain);
 
 			  var bisect = d3.bisector(function(d) { return d.date; }).left;
-
 
 			  var line = d3.svg.line()
 			      .x(function(d) { return x(d.date); })
@@ -48,29 +47,6 @@ app.directive('lineFollow', function(){
 			  .append("g")
 			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-			if(scope.first=="true"){
-				var yAxis = d3.svg.axis()
-				    .scale(y)
-				    .orient("left");
-
-				svg.append("g")
-				    .attr("class", "y axis")
-				    .call(yAxis)
-				  .append("text")
-				    .attr("transform", "rotate(-90)")
-				    .attr("y", -25)
-				    .attr("dy", ".71em")
-				    .attr("font-size","13px")
-				    .style("text-anchor", "end")
-				    .text(scope.specs.label);
-			}
-
-
-			y.domain(scope.specs.ydomain);
-
-			var city = scope.city
-				, data = scope.specs.data[city]
-				, format = scope.specs.format;
 
 			var xLine = svg.append("g")
 			    .attr("class", "g-x g-axis")
@@ -147,6 +123,103 @@ app.directive('lineFollow', function(){
           		scope.date.val = q
           		);
           });
+
+		}
+	};
+});
+
+app.directive('axisMaker', function(){
+	// Runs during compile
+	return {
+		scope: {
+			title: "@"
+		},
+		restrict: "E",
+		link: function(scope, el, attr) {
+			// set up initial svg object
+
+			var margin = {top: 35, right: 0, bottom: 5, left: 0};
+
+			var width = 25 - margin.left - margin.right,
+			    height = 175 - margin.top - margin.bottom;
+
+			var svg = d3.select(el[0]).append("svg")
+			    .attr("width", width + margin.left + margin.right)
+			    .attr("height", height + margin.top + margin.bottom)
+			  .append("g")
+			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+			svg.append("text")
+					.attr("class","title")
+		      .attr("transform", "rotate(-90)")
+		      .attr("font-size","12px")
+		      .attr("y", 6)
+		      .attr("dy", ".71em")
+		      .style("text-anchor", "end")
+		      .text(scope.title);
+		}
+	};
+});
+
+app.directive('bar', function(){
+	// Runs during compile
+	return {
+		scope: {
+			city: "=",
+			key: "@",
+			specs: "=",
+			color: "@"
+			// domain: "="
+		},
+		restrict: "E",
+		link: function(scope, el, attr) {
+
+			var city = scope.city
+				, key = scope.key
+				, val = scope.specs.data[key][city];
+
+			var margin = {top: 25, right: 10, bottom: 5, left: 10};
+
+			var width = 100 - margin.left - margin.right,
+			    height = 90 - margin.top - margin.bottom;
+
+			var svg = d3.select(el[0]).append("svg")
+			    .attr("width", width + margin.left + margin.right)
+			    .attr("height", height + margin.top + margin.bottom)
+			  .append("g")
+			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+			var y = d3.scale.linear()
+					.domain(scope.specs.ydomain)
+			    .range([height, 0]);
+
+			var bar = svg.append("g")
+				    .datum(val);
+
+			  bar.append("rect")
+			    .attr("class", "bar")
+			    .attr("x", width/3 )
+			    .attr("width", width/3)
+			    .attr("y", y)
+			    .attr("stroke", scope.color)
+			    .attr("height", function(d) { return height - y(d) + .25; });
+
+			var xLine = svg.append("g")
+			    .attr("class", "g-x g-axis")
+			  .append("line")
+			    .attr("x2", 80)
+			    .attr("y1", height)
+			    .attr("y2", height);
+
+			bar.append("text")
+					.attr("x", width/2 )
+					.text(function(d){ return scope.specs.format(d); }) 
+					.attr("fill","black")
+					.attr("font-size","12px")
+					.attr("y", y)
+					.attr("text-anchor","middle")
+					.attr("dy","-.5em");
+
 
 		}
 	};

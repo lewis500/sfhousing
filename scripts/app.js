@@ -12,9 +12,7 @@ app.controller('mainCtrl',["$scope", "data", function($scope, dat){
 		};
 	});
 
-	dat.permits;
-
-	dat.prices;
+	console.log(dat.profiles)
 
 	$scope.color = 	d3.scale.category10()
 			.domain(cityNames);
@@ -27,10 +25,20 @@ app.controller('mainCtrl',["$scope", "data", function($scope, dat){
 			label: "Median Home Price"
 		}
 		, permits: {
-			ydomain: [0,6500],
+			ydomain: [0,7500],
 			format: d3.format(".2s"),
 			data: dat.permits,
 			label: "Housing Permits Issued"
+		}
+		, income: {
+			ydomain: [40000, 80000],
+			data: dat.profiles,
+			format: d3.format("$,3"),
+		}
+		, area: {
+			ydomain: [2000, 9000],
+			data: dat.profiles,
+			format: d3.format(",g")
 
 		}
 	};

@@ -1,6 +1,5 @@
-replace houston with dallas
-replace san diego with charlotte
-replace los angeles with boston
+add titles in
+add labels on bar charts
+make bar charts smaller
+clean up how you pass data to the bar charts
 
-create a directive for the y axis
-clean out the directive that I have
