@@ -14,31 +14,31 @@ app.directive('lineFollow', function(){
 				, data = scope.specs.data[city]
 				, format = scope.specs.format;
 
-				var margin = {top: 35, right: 10, bottom: 5, left: 10};
+			var margin = {top: 35, right: 10, bottom: 5, left: 10};
 
-				var width = 100 - margin.left - margin.right,
-				    height = 175 - margin.top - margin.bottom;
+			var width = 100 - margin.left - margin.right,
+			    height = 175 - margin.top - margin.bottom;
 
-				if(scope.bottom == "true") height -= 10; margin.bottom +=10;
+			if(scope.bottom == "true") height -= 10; margin.bottom +=10;
 
-			  var x = d3.time.scale()
-			      .range([0, width])
-			      .domain([
-			  		new Date("1997-07-01"),
-			  		new Date("2013-12-01")
-			  	]);
+		  var x = d3.time.scale()
+		      .range([0, width])
+		      .domain([
+		  		new Date("1997-07-01"),
+		  		new Date("2013-12-01")
+		  	]);
 
-			  var xBackwards = d3.scale.linear().domain(x.range());
+		  var xBackwards = d3.scale.linear().domain(x.range());
 
-			  var y = d3.scale.linear()
-			      .range([height, 0])
-			      .domain(scope.specs.ydomain);
+		  var y = d3.scale.linear()
+		      .range([height, 0])
+		      .domain(scope.specs.ydomain);
 
-			  var bisect = d3.bisector(function(d) { return d.date; }).left;
+		  var bisect = d3.bisector(function(d) { return d.date; }).left;
 
-			  var line = d3.svg.line()
-			      .x(function(d) { return x(d.date); })
-			      .y(function(d) { return y(d.val); });
+		  var line = d3.svg.line()
+		      .x(function(d) { return x(d.date); })
+		      .y(function(d) { return y(d.val); });
 
 			// set up initial svg object
 			var svg = d3.select(el[0]).append("svg")
@@ -47,7 +47,6 @@ app.directive('lineFollow', function(){
 			  .append("g")
 			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
 			var xLine = svg.append("g")
 			    .attr("class", "g-x g-axis")
 			  .append("line")
@@ -55,19 +54,16 @@ app.directive('lineFollow', function(){
 			    .attr("y1", height)
 			    .attr("y2", height);
 
-			var gPaths = svg.append("g")
-				.attr("class","g-paths");
-
-      svg.append("path")
+      var path = svg.append("path")
       		.datum(data)
           .attr("class", "line")
           .attr("d", line);
 
       var circle = svg.append("g")
-          .attr("class", "dot");
-
-        circle.append("circle")
+          .attr("class", "dot")
+        .append("circle")
         	.attr("r",3);
+
 
       var textLabel = svg.append("text")
       	.attr("class", "number")
@@ -78,7 +74,36 @@ app.directive('lineFollow', function(){
       	    .attr("dy", "1em")
       	    .style("opacity", scope.bottom == "true" ? 1 : 0);
 
-     	var stretch = Math.round(data.length *0.25)
+     	var stretch = Math.round(data.length *0.25);
+
+
+     	function absolute(){
+
+     		data = scope.specs.data[city];
+
+     		y.domain(scope.specs.ydomain2);
+
+     		path.datum(data)
+	     		.transition().duration(500)
+     			.attr("d",line);
+
+     	}
+
+     	function perSqMi(){
+
+     		var landArea = scope.specs.area[city];
+
+     		data = data.map(function(d){
+     			return d.val/landArea
+     		});
+
+     		y.domain(scope.specs.ydomain2);
+
+     		path.datum(data)
+	     		.transition().duration(500)
+     			.attr("d",line);
+
+     	};
 
       scope.$watch('date.val', function(newDate){
 
@@ -169,14 +194,13 @@ app.directive('bar', function(){
 			key: "@",
 			specs: "=",
 			color: "@"
-			// domain: "="
 		},
 		restrict: "E",
 		link: function(scope, el, attr) {
 
 			var city = scope.city
 				, key = scope.key
-				, val = scope.specs.data[key][city];
+				, val = scope.specs.data[city];
 
 			var margin = {top: 25, right: 10, bottom: 5, left: 10};
 

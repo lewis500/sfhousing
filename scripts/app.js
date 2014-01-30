@@ -20,26 +20,34 @@ app.controller('mainCtrl',["$scope", "data", function($scope, dat){
 	$scope.specs = {
 		prices: {
 			ydomain: [0,700000],
+			ydomain2: [0,200],
 			format: d3.format("$.3s"),
-			data: dat.prices,
-			label: "Median Home Price"
+			data: dat.prices
 		}
 		, permits: {
 			ydomain: [0,7500],
 			format: d3.format(".2s"),
-			data: dat.permits,
-			label: "Housing Permits Issued"
+			data: dat.permits
 		}
 		, income: {
-			ydomain: [40000, 80000],
-			data: dat.profiles,
+			ydomain: [0, 80000],
+			data: dat.profiles['Median Income'],
 			format: d3.format("$,3"),
 		}
 		, area: {
-			ydomain: [2000, 9000],
-			data: dat.profiles,
+			ydomain: [0, 9000],
+			data: dat.profiles['Land Area'],
 			format: d3.format(",g")
-
+		}
+		, rent: {
+			ydomain: [0, 2000],
+			data: dat.profiles['Rent'],
+			format: d3.format("$,3"),
+		}
+		, units: {
+			ydomain: [0, 3000000],
+			data: dat.profiles['Housing Units'],
+			format: d3.format(".3s"),
 		}
 	};
 

@@ -238,7 +238,7 @@ app.factory('data', function(){
 		{"key":"Rent","San Francisco":1381,"Boston":1184,"Portland":916,"Seattle":1072,"Dallas":889,"Atlanta":949},
 		{"key":"Housing multiple","San Francisco":8,"Boston":5,"Portland":5,"Seattle":5,"Dallas":3,"Atlanta":3},
 		{"key":"Rent multiple","San Francisco":0,"Boston":0,"Portland":0,"Seattle":0,"Dallas":0,"Atlanta":0},
-		{"key":"Housing units","San Francisco":1741999,"Boston":1883206,"Portland":925076,"Seattle":1463295,"Dallas":2502075,"Atlanta":2165495},
+		{"key":"Housing Units","San Francisco":1741999,"Boston":1883206,"Portland":925076,"Seattle":1463295,"Dallas":2502075,"Atlanta":2165495},
 		{"key":"Land Area","San Francisco":2470,"Boston":3487,"Portland":6683,"Seattle":5873,"Dallas":8927,"Atlanta":8339}];
 
 	var parseDate = d3.time.format("%Y-%m-%d").parse;
@@ -269,10 +269,7 @@ app.factory('data', function(){
 		      return {date: parseDate(d.date), val: +d[name]};
 		    });
 
-
 	});
-
-
 
 	return {
 		prices: prices,

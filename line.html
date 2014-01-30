@@ -92,8 +92,10 @@ h4{
   <div style="display:inline-block; width: 80px; vertical-align: top; position: relative;">
     <p style="position: absolute; top: 75px; text-align: center;">Home Permits Issued</p>
     <p style="position: absolute; top: 250px; text-align: center;">Median Home Prices</p>
-    <p style="position: absolute; top: 420px; text-align: center;">Median Household Income</p>
-    <p style="position: absolute; top: 520px; text-align: center;">Land Area (sq. mi.)</p>
+    <p style="position: absolute; top: 420px; text-align: center;">Median Rent</p>
+    <p style="position: absolute; top: 520px; text-align: center;">Median Household Income</p>
+    <p style="position: absolute; top: 620px; text-align: center;">Land Area (sq. mi.)</p>
+    <p style="position: absolute; top: 720px; text-align: center;">Housing Units</p>
   </div>
   
 
@@ -108,9 +110,13 @@ h4{
 
       <line-follow city="city.name" date="date.val" specs="specs.prices" bottom="true"></line-follow>
 
+      <bar city="city.name" specs="specs.rent" key="Rent" color="{{color(city.name)}}"></bar>
+
       <bar city="city.name" specs="specs.income" key="Median Income" color="{{color(city.name)}}"></bar>
 
       <bar city="city.name" specs="specs.area" key="Land Area" color="{{color(city.name)}}"></bar>
+
+      <bar city="city.name" specs="specs.units" key="Housing Units" color="{{color(city.name)}}"></bar>
 
     </div>
   </div>
