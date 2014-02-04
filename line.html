@@ -89,6 +89,21 @@ h4{
 <body ng-app="lineApp">
 <div ng-controller="mainCtrl">
 
+Over the past six months, San Francisco's housing prices and apartment rents have spawned coverage and editorials in Bloomberg, Wall Street Journal, New York Times and the Atlantic.  The consensus in the editorial pages has been that permitting and land use regulations keep supply from catching up to demand. For example, Ed Glaeser, Professor of Economics at Harvard University, has spent years studying land use controls, and he recently wrote in the Times: "The best way to make cities more affordable is to reduce the barriers to building and unleash the cranes." San Francisco Mayor Ed Lee appears to agree. Announcing his affordable housing plan, Lee remarked, "We are all responsible - this is a crisis of our own making." He plans to permit 30,000 housing units over the next six years...an average of 5,000 per year. This is certainly much faster than San Francisco has been building housing. <br>
+
+net change chart for SF <br>
+
+Will it have an impact, though? 30,000 sounds like a big number, but San Francisco already has about 378,000 housing units, so over six years it only means a 1.2% annual rate of growth. More importantly, San Francisco is just one of dozens of cities that overlap in one giant market for living space in the Bay area. On the chart below, you'll see the San Francisco-Oakland-Fremont Metropolitan Statitical Area (MSA) compared to other MSA's around the country. San Francisco and Boston are metros where it's hard to build--for both geographic and regulatory reasons--and have seen huge price rises. Dallas and Charlotte are the opposite: they don't substantially restrict home-building and have plenty of room to grow. Thus, they have stable, low housing prices. Finally, Seattle and Portland are in the middle: both have urban growth boundaries but allow enough construction to temper housing prices. <br>
+
+big chart <br>
+
+The figure above also includes other statistics to keep the issue in context. Even though home prices are extremely high in the Bay area, the median rent is only 21% of the median income, which is approximately what it is for the other cities depicted. And the Bay isn't as restrctive as it seems at first blush once you consider how little its land area is. <br>
+
+A final caveat that the data show is the connection between the housing bubble and how easy it is to build housing. In places where it's easy to build housing, the housing bubble was a building bubble...prices went up a little while construction boomed. In places where it's hard to build housing, the housing bubble was a price bubble...prices skyrocketed while construction only nudged upwards. <br>
+
+http://www.nytimes.com/2005/08/08/opinion/08krugman.html <br>
+
+
   <div style="display:inline-block; width: 80px; vertical-align: top; position: relative;">
     <p style="position: absolute; top: 75px; text-align: center;">Home Permits Issued</p>
     <p style="position: absolute; top: 250px; text-align: center;">Median Home Prices</p>
@@ -98,7 +113,7 @@ h4{
     <p style="position: absolute; top: 720px; text-align: center;">Housing Units</p>
   </div>
   
-
+  
   <div style="display: inline-block;">
     <div ng-repeat="city in cityNamesLoop" ng-style="{width: '100px'}" style=" display: inline-block; position: relative" >
 
@@ -106,9 +121,9 @@ h4{
 
       <h4>{{city.name}}</h4>
 
-      <line-follow city="city.name" date="date.val" specs="specs.permits" bottom="false"></line-follow>
+      <line-follow city="city.name" date="date.val" specs="specs.permits" bottom="false" per="per.truth" ></line-follow>
 
-      <line-follow city="city.name" date="date.val" specs="specs.prices" bottom="true"></line-follow>
+      <line-follow city="city.name" date="date.val" specs="specs.prices" bottom="true" per="per.truth"></line-follow>
 
       <bar city="city.name" specs="specs.rent" key="Rent" color="{{color(city.name)}}"></bar>
 
