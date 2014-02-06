@@ -27,7 +27,7 @@ h4{
 <div id="main">
   <h4>Sources of Housing Creation and Destruction</h4>
   <div id="chartContainer"></div>
-  <h4>Net Change in Housing Units</h4>
+  <h4>Net Growth in Housing Units and Jobs since 1991</h4>
   <div id ="chartContainer2"></div>
 </div>
 
@@ -56,26 +56,41 @@ h4{
   {"Year":2010,"New Construction":1082,"Demolished":-170,"Alterations":318},
   {"Year":2011,"New Construction":348,"Demolished":-84,"Alterations":5}];
 
-  var totalData = [{"Date":1992,"Net Change":725},
-    {"Date":1993,"Net Change":288},
-    {"Date":1994,"Net Change":1186},
-    {"Date":1995,"Net Change":401},
-    {"Date":1996,"Net Change":683},
-    {"Date":1997,"Net Change":725},
-    {"Date":1998,"Net Change":874},
-    {"Date":1999,"Net Change":1285},
-    {"Date":2000,"Net Change":1797},
-    {"Date":2001,"Net Change":1779},
-    {"Date":2002,"Net Change":2408},
-    {"Date":2003,"Net Change":2496},
-    {"Date":2004,"Net Change":1487},
-    {"Date":2005,"Net Change":1855},
-    {"Date":2006,"Net Change":1914},
-    {"Date":2007,"Net Change":2567},
-    {"Date":2008,"Net Change":3263},
-    {"Date":2009,"Net Change":3454},
-    {"Date":2010,"Net Change":1230},
-    {"Date":2011,"Net Change":269}];
+  var totalData = [{"Year":1992,"Jobs":207,"Housing":725},
+    {"Year":1993,"Jobs":1731,"Housing":1013},
+    {"Year":1994,"Jobs":-2512,"Housing":2199},
+    {"Year":1995,"Jobs":-9372,"Housing":2600},
+    {"Year":1996,"Jobs":-6228,"Housing":3283},
+    {"Year":1997,"Jobs":3673,"Housing":4008},
+    {"Year":1998,"Jobs":10024,"Housing":4882},
+    {"Year":1999,"Jobs":13256,"Housing":6167},
+    {"Year":2000,"Jobs":68095,"Housing":7964},
+    {"Year":2001,"Jobs":64802,"Housing":9743},
+    {"Year":2002,"Jobs":45895,"Housing":12151},
+    {"Year":2003,"Jobs":27828,"Housing":14647},
+    {"Year":2004,"Jobs":15483,"Housing":16134},
+    {"Year":2005,"Jobs":9470,"Housing":17989},
+    {"Year":2006,"Jobs":12118,"Housing":19903},
+    {"Year":2007,"Jobs":28552,"Housing":22470},
+    {"Year":2008,"Jobs":53159,"Housing":25733},
+    {"Year":2009,"Jobs":54858,"Housing":29187},
+    {"Year":2010,"Jobs":52344,"Housing":30417},
+    {"Year":2011,"Jobs":60596,"Housing":30686},
+    {"Year":2012,"Jobs":72968,"Housing":31294}];
+
+  var lineData = [];
+
+  totalData.forEach(function(d){
+    _.each(d, function(val, key){
+      if(key!== "Year"){
+        lineData.unshift({
+          Year: d.Year,
+          Metric: key,
+          Change: val
+        });
+      }
+    })
+  });
 
   var data =[];
 
@@ -93,7 +108,6 @@ h4{
 
   function stackedBar(){
     var svg = dimple.newSvg("#chartContainer", 590, 400);
-    // data = dimple.filterData(rawData, "Owner", ["Aperture", "Black Mesa"])
     var myChart = new dimple.chart(svg, data);
     myChart.setBounds(70, 30, 505, 330);
     var x = myChart.addCategoryAxis("x", "Date");
@@ -101,8 +115,8 @@ h4{
     var y = myChart.addMeasureAxis("y", "Housing Units");
     y.tickFormat = ",g"
     myChart.addSeries("Source", dimple.plot.bar);
+    myChart.addSeries(null,dimple.plot.line);
     var leg = myChart.addLegend(75, 25, 150, 50, "right");
-    // leg.width = 400;
     myChart.draw();
     x.titleShape.remove();
   }
@@ -110,16 +124,18 @@ h4{
 
   function lineTotal(){
 
-    var svg = dimple.newSvg("#chartContainer2", 590, 210);
-    var myChart = new dimple.chart(svg, totalData);
-    myChart.setBounds(70, 15, 505, 140);
-    var x = myChart.addCategoryAxis("x", "Date");
-    x.addOrderRule("Date");
-    var y = myChart.addMeasureAxis("y", "Net Change");
+    var svg = dimple.newSvg("#chartContainer2", 620, 330);
+    var myChart = new dimple.chart(svg, lineData);
+    myChart.setBounds(70, 15, 505, 280);
+    var x = myChart.addCategoryAxis("x", ["Year"]);
+    var y = myChart.addMeasureAxis("y", "Change");
     y.tickFormat = ",g"
-    var s = myChart.addSeries(null, dimple.plot.area);
+    var w = myChart.addSeries("Metric", dimple.plot.line);
+    var leg = myChart.addLegend(75, 25, 150, 50, "right");
+
     myChart.draw();
     x.titleShape.remove();
+    y.titleShape.remove();
 
   }
 

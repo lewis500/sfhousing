@@ -1,5 +1,0 @@
-add titles in
-add labels on bar charts
-make bar charts smaller
-clean up how you pass data to the bar charts
-
