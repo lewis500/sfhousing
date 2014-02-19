@@ -17,7 +17,6 @@ h4{
   width: 620px;
 }
 
-
 </style>
 
 <script src="http://d3js.org/d3.v3.js"></script>
@@ -25,12 +24,8 @@ h4{
 <script src="scripts/libraries/underscore.js"></script>
 <body>
 <div id="main">
-  <h4>Sources of Housing Creation and Destruction: San Francisco</h4>
-  <div id="chartContainer"></div>
   <h4>Sources of Housing Creation and Destruction: Seattle</h4>
   <div id="chartContainerSeattle"></div>
-  <h4>Net Change in Housing Units and Jobs since 1991</h4>
-  <div id ="chartContainer2"></div>
 </div>
 
   <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -38,36 +33,36 @@ h4{
   <script type="text/javascript">
 
   var rawData = [{"Year":1992,"New Construction":767,"Alterations":34, "Demolished":-76,},
-  {"Year":1993,"New Construction":379,"Alterations":-65, "Demolished":-26},
-  {"Year":1994,"New Construction":1234,"Alterations":-23, "Demolished":-25,},
-  {"Year":1995,"New Construction":532,"Alterations":-76, "Demolished":-55,},
-  {"Year":1996,"New Construction":909,"Alterations":52, "Demolished":-278,},
-  {"Year":1997,"New Construction":906,"Alterations":163, "Demolished":-344,},
-  {"Year":1998,"New Construction":909,"Alterations":19, "Demolished":-54,},
-  {"Year":1999,"New Construction":1225,"Alterations":158, "Demolished":-98,},
-  {"Year":2000,"New Construction":1859,"Alterations":-1,"Demolished":-61,},
-  {"Year":2001,"New Construction":1619,"Alterations":259, "Demolished":-99,},
-  {"Year":2002,"New Construction":2260,"Alterations":221, "Demolished":-73,},
-  {"Year":2003,"New Construction":2730,"Alterations":52, "Demolished":-286,},
-  {"Year":2004,"New Construction":1780,"Alterations":62, "Demolished":-355,},
-  {"Year":2005,"New Construction":1872,"Alterations":157, "Demolished":-174,},
-  {"Year":2006,"New Construction":1675,"Alterations":280, "Demolished":-41,},
-  {"Year":2007,"New Construction":2197,"Alterations":451, "Demolished":-81,},
-  {"Year":2008,"New Construction":3019,"Alterations":273, "Demolished":-29,},
-  {"Year":2009,"New Construction":3366,"Alterations":117, "Demolished":-29,},
-  {"Year":2010,"New Construction":1082,"Alterations":318, "Demolished":-170,},
-  {"Year":2011,"New Construction":348,"Alterations":5, "Demolished":-84,}];
+    {"Year":1993,"New Construction":379,"Alterations":-65, "Demolished":-26},
+    {"Year":1994,"New Construction":1234,"Alterations":-23, "Demolished":-25,},
+    {"Year":1995,"New Construction":532,"Alterations":-76, "Demolished":-55,},
+    {"Year":1996,"New Construction":909,"Alterations":52, "Demolished":-278,},
+    {"Year":1997,"New Construction":906,"Alterations":163, "Demolished":-344,},
+    {"Year":1998,"New Construction":909,"Alterations":19, "Demolished":-54,},
+    {"Year":1999,"New Construction":1225,"Alterations":158, "Demolished":-98,},
+    {"Year":2000,"New Construction":1859,"Alterations":-1,"Demolished":-61,},
+    {"Year":2001,"New Construction":1619,"Alterations":259, "Demolished":-99,},
+    {"Year":2002,"New Construction":2260,"Alterations":221, "Demolished":-73,},
+    {"Year":2003,"New Construction":2730,"Alterations":52, "Demolished":-286,},
+    {"Year":2004,"New Construction":1780,"Alterations":62, "Demolished":-355,},
+    {"Year":2005,"New Construction":1872,"Alterations":157, "Demolished":-174,},
+    {"Year":2006,"New Construction":1675,"Alterations":280, "Demolished":-41,},
+    {"Year":2007,"New Construction":2197,"Alterations":451, "Demolished":-81,},
+    {"Year":2008,"New Construction":3019,"Alterations":273, "Demolished":-29,},
+    {"Year":2009,"New Construction":3366,"Alterations":117, "Demolished":-29,},
+    {"Year":2010,"New Construction":1082,"Alterations":318, "Demolished":-170,},
+    {"Year":2011,"New Construction":348,"Alterations":5, "Demolished":-84,}];
 
 
   var seattleRaw = [{"Year":2005,"New Construction":3669,"Demolished":-551},
-{"Year":2006,"New Construction":3456,"Demolished":-575},
-{"Year":2007,"New Construction":4531,"Demolished":-882},
-{"Year":2008,"New Construction":4967,"Demolished":-985},
-{"Year":2009,"New Construction":7334,"Demolished":-341},
-{"Year":2010,"New Construction":3943,"Demolished":-309},
-{"Year":2011,"New Construction":2305,"Demolished":-169},
-{"Year":2012,"New Construction":3252,"Demolished":-577},
-{"Year":2013,"New Construction":6622,"Demolished":-338}];
+    {"Year":2006,"New Construction":3456,"Demolished":-575},
+    {"Year":2007,"New Construction":4531,"Demolished":-882},
+    {"Year":2008,"New Construction":4967,"Demolished":-985},
+    {"Year":2009,"New Construction":7334,"Demolished":-341},
+    {"Year":2010,"New Construction":3943,"Demolished":-309},
+    {"Year":2011,"New Construction":2305,"Demolished":-169},
+    {"Year":2012,"New Construction":3252,"Demolished":-577},
+    {"Year":2013,"New Construction":6622,"Demolished":-338}];
 
   var totalData = [{"Year":1992,"Jobs":207,"Housing":725},
     {"Year":1993,"Jobs":1731,"Housing":1013},
@@ -169,7 +164,6 @@ h4{
     // d3.selectAll(".Net").style("opacity","1");
   }
 
-
   function lineTotal(){
 
     var svg = dimple.newSvg("#chartContainer2", 620, 330);
@@ -187,12 +181,8 @@ h4{
 
   }
 
-
   //implement
-  stackedBar();
   seattleBar();
-  lineTotal();
-
 
   </script>
 

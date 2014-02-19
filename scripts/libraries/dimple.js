@@ -637,7 +637,7 @@ var dimple = {
                             newRow,
                             updateData;
                         if (series.categoryFields === null || series.categoryFields === undefined || series.categoryFields.length === 0) {
-                            aggField = ["All"];
+                            aggField = ["Net"];
                         } else if (series.categoryFields.length === 1 && d[series.categoryFields[0]] === undefined) {
                             aggField = [series.categoryFields[0]];
                         } else {
@@ -1122,14 +1122,14 @@ var dimple = {
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.chart#wiki-defaultColors
         this.defaultColors = [
             new dimple.color("#80B1D3"), // Blue
-            new dimple.color("#FB8072"), // Red
             new dimple.color("#FDB462"), // Orange
-            new dimple.color("#B3DE69"), // Green
+            new dimple.color("#FB8072"), // Red
+            new dimple.color("#888"), // Pale Blue
             new dimple.color("#FFED6F"), // Yellow
             new dimple.color("#BC80BD"), // Purple
             new dimple.color("#8DD3C7"), // Turquoise
-            new dimple.color("#CCEBC5"), // Pale Blue
             new dimple.color("#FFFFB3"), // Pale Yellow
+            new dimple.color("#B3DE69"), // Green
             new dimple.color("#BEBADA"), // Lavender
             new dimple.color("#FCCDE5"), // Pink
             new dimple.color("#D9D9D9")  // Grey
