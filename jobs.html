@@ -26,7 +26,7 @@ h4{
 <script src="scripts/libraries/underscore.js"></script>
 <body>
 <div id="main">
-  <h4>Net Change in Housing Units and Jobs since 1991</h4>
+  <h4>Net Changes since 1991</h4>
   <div id ="chartContainer2"></div>
 </div>
 
@@ -66,27 +66,27 @@ h4{
 {"Year":2012,"New Construction":3252,"Demolished":-577},
 {"Year":2013,"New Construction":6622,"Demolished":-338}];
 
-  var totalData = [{"Year":1992,"Jobs":207,"Housing":725},
-    {"Year":1993,"Jobs":1731,"Housing":1013},
-    {"Year":1994,"Jobs":-2512,"Housing":2199},
-    {"Year":1995,"Jobs":-9372,"Housing":2600},
-    {"Year":1996,"Jobs":-6228,"Housing":3283},
-    {"Year":1997,"Jobs":3673,"Housing":4008},
-    {"Year":1998,"Jobs":10024,"Housing":4882},
-    {"Year":1999,"Jobs":13256,"Housing":6167},
-    {"Year":2000,"Jobs":68095,"Housing":7964},
-    {"Year":2001,"Jobs":64802,"Housing":9743},
-    {"Year":2002,"Jobs":45895,"Housing":12151},
-    {"Year":2003,"Jobs":27828,"Housing":14647},
-    {"Year":2004,"Jobs":15483,"Housing":16134},
-    {"Year":2005,"Jobs":9470,"Housing":17989},
-    {"Year":2006,"Jobs":12118,"Housing":19903},
-    {"Year":2007,"Jobs":28552,"Housing":22470},
-    {"Year":2008,"Jobs":53159,"Housing":25733},
-    {"Year":2009,"Jobs":54858,"Housing":29187},
-    {"Year":2010,"Jobs":52344,"Housing":30417},
-    {"Year":2011,"Jobs":60596,"Housing":30686},
-    {"Year":2012,"Jobs":72968,"Housing":31294}];
+  var totalData = [{"Year":1992,"Jobs":207,"Housing Units":725,"Population":5153},
+{"Year":1993,"Jobs":1731,"Housing Units":1013,"Population":10569},
+{"Year":1994,"Jobs":-2512,"Housing Units":2199,"Population":12608},
+{"Year":1995,"Jobs":-9372,"Housing Units":2600,"Population":16678},
+{"Year":1996,"Jobs":-6228,"Housing Units":3283,"Population":24226},
+{"Year":1997,"Jobs":3673,"Housing Units":4008,"Population":33245},
+{"Year":1998,"Jobs":10024,"Housing Units":4882,"Population":40554},
+{"Year":1999,"Jobs":13256,"Housing Units":6167,"Population":45008},
+{"Year":2000,"Jobs":68095,"Housing Units":7964,"Population":47632},
+{"Year":2001,"Jobs":64802,"Housing Units":9743,"Population":54969},
+{"Year":2002,"Jobs":45895,"Housing Units":12151,"Population":49739},
+{"Year":2003,"Jobs":27828,"Housing Units":14647,"Population":45955},
+{"Year":2004,"Jobs":15483,"Housing Units":16134,"Population":43848},
+{"Year":2005,"Jobs":9470,"Housing Units":17989,"Population":48127},
+{"Year":2006,"Jobs":12118,"Housing Units":19903,"Population":56479},
+{"Year":2007,"Jobs":28552,"Housing Units":22470,"Population":69477},
+{"Year":2008,"Jobs":53159,"Housing Units":25733,"Population":78196},
+{"Year":2009,"Jobs":54858,"Housing Units":29187,"Population":85476},
+{"Year":2010,"Jobs":52344,"Housing Units":30417,"Population":75899},
+{"Year":2011,"Jobs":60596,"Housing Units":30686,"Population":84525},
+{"Year":2012,"Jobs":72968,"Housing Units":31294,"Population":96155}];
 
   var lineData = [];
 
@@ -96,7 +96,7 @@ h4{
         lineData.unshift({
           Year: d.Year,
           Metric: key,
-          Change: val
+          "Net Change": val
         });
       }
     })
@@ -173,10 +173,10 @@ h4{
     var myChart = new dimple.chart(svg, lineData);
     myChart.setBounds(70, 15, 505, 280);
     var x = myChart.addCategoryAxis("x", ["Year"]);
-    var y = myChart.addMeasureAxis("y", "Change");
+    var y = myChart.addMeasureAxis("y", "Net Change");
     y.tickFormat = ",g"
     var w = myChart.addSeries("Metric", dimple.plot.line);
-    var leg = myChart.addLegend(75, 25, 150, 50, "right");
+    var leg = myChart.addLegend(50, 25, 150, 50, "right");
 
     myChart.draw();
     x.titleShape.remove();
