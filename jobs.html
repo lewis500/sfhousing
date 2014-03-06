@@ -32,6 +32,7 @@ h4{
   <h4>Net Changes since 1991</h4>
   <div id ="chartContainer2"></div>
   <div id="slider"></div>
+  <div id="icons"></div>
 </div>
 
 </body>
@@ -221,10 +222,13 @@ h4{
 
   var svg;
 
+  var y = d3.scale.linear().domain(d3.extent(lineData.map(function(d){return d["Net Change"]; }))).range([293.4,24.8]);
+  var x = d3.scale.linear().domain([1992,2012]).range([82,563]);
+
   function lineTotal(){
 
    svg = dimple.newSvg("#chartContainer2", 620, 330);
-    var myChart = new dimple.chart(svg, lineData);
+   myChart = new dimple.chart(svg, lineData);
     myChart.setBounds(70, 15, 505, 280);
     var x = myChart.addCategoryAxis("x", ["Year"]);
     var y = myChart.addMeasureAxis("y", "Net Change");
@@ -236,24 +240,30 @@ h4{
     x.titleShape.remove();
     y.titleShape.remove();
 
-  }
+  };
 
-  var sliderCall = d3.slider().max(20).min(0).step(1).value(15).on("slide",slide);
-
-  d3.select('#slider').call(sliderCall);
 
   d3.select("#slider")
     .style({
       width: 505 + "px",
       "margin-top": 5 + "px",
       "margin-left": 70 + "px",
-      // "margin-bottom": 30 + "px"
     });
+
+  var sliderCall = d3.slider().max(20).min(0).step(.25).on("slide",slide);
+
+  d3.select('#slider').call(sliderCall);
 
   //implement
   lineTotal();
 
-  var icons = svg.append("g").attr("transform","translate(" + [250,50] + ")");
+  var svg2 = d3.select("#icons").append("svg")
+    .attr("width",620)
+    .attr("height",150);
+
+  var scale = d3.scale.linear().domain([0,100000]).range([1,2.5]);
+
+  var icons = svg2.append("g").attr("transform","translate(" + [150,50] + ")");
 
   var house = icons.append("g").call(d3.sticker("#house"));
 
@@ -263,16 +273,59 @@ h4{
 
   worker.append("g").call(d3.sticker("#worker"));
 
-  var scale = d3.scale.linear().domain([0,100000]).range([1,2.5]);
+  var a = scale(totalData[0]["Housing Units"]);
+  var b = scale(totalData[0]["Jobs"]);
+  var c = scale(totalData[0]["Population"]);
 
-  function slide(event, d){
-    var a = scale(totalData[+d]["Housing Units"]);
-    var b = scale(totalData[+d]["Jobs"]);
-    var c = scale(totalData[+d]["Population"]);
+  house.select("polygon").attr("transform","translate(" + [-a*10,-a*10] + ")" + "scale(" + a + ")");
+  worker.select("#subworker").attr("transform","translate(" + [-b*28,-b*28] + ")" + "scale(" + b + ")");
+  people.select("#subpeople").attr("transform","translate(" + [-c*25,-c*28] + ")" + "scale(" + c + ")");
+
+  var paths = ["Population","Housing Units","Jobs"];
+
+  var color = d3.scale.ordinal().domain(paths).range(["#6b94b0","#d26b5f", "#d39651"]);
+
+  setTimeout(function(d){
+
+
+    balls = svg.selectAll("balls")
+      .data(paths)
+      .enter()
+      .append("circle")
+      .attr({
+        r: 5,
+        fill: color,
+      })
+      .style("pointer-events","none");
+    
+  },500);
+
+
+  // var circle = d3.select("").append("circle")
+
+
+  function slide(event, n){
+
+
+    var d = Math.round(n);
+
+    balls
+      .attr({
+        transform: function(v) {
+          var t = totalData[d];
+          return "translate(" + [x(t["Year"]), y(t[v])] + ")";
+        }
+      });
+
+
+    var a = scale(totalData[d]["Housing Units"]);
+    var b = scale(totalData[d]["Jobs"]);
+    var c = scale(totalData[d]["Population"]);
 
     house.select("polygon").attr("transform","translate(" + [-a*10,-a*10] + ")" + "scale(" + a + ")");
     worker.select("#subworker").attr("transform","translate(" + [-b*28,-b*28] + ")" + "scale(" + b + ")");
     people.select("#subpeople").attr("transform","translate(" + [-c*25,-c*25] + ")" + "scale(" + c + ")");
+
 
   };
 
