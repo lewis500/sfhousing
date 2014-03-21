@@ -363,8 +363,6 @@ y.domain([
   })
 ]);
 
-
-
 svg.append("g")
   .attr("class", "x axis")
   .attr("transform", "translate(0," + height + ")")
@@ -373,8 +371,6 @@ svg.append("g")
 var gYAxis = svg.append("g")
   .attr("class", "y axis")
   .call(yAxis)
-
-
 
 
 var bisect = d3.bisector(function(d) {
@@ -434,6 +430,8 @@ metricsInvisible
     div.html(formatTime(c.date) + ": " + d.name + "<br/>" + "Change since 1991: " + format2(c[which]) + "<br/>" + "Total: " + format2(c.abs))
       .style("left", (x(c.date) - 10) + "px")
       .style("top", (y(c[which]) - 25) + "px");
+
+      
 
   })
   .on("mouseout", function(d) {
