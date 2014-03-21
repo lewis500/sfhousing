@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link href='http://fonts.googleapis.com/css?family=Fenix' rel='stylesheet' type='text/css'>
+<style>
+body {
+  font-family: Fenix, serif;
+  font-size: 11;
+}
+h4 {
+  margin-bottom: 0px;
+  text-align: center;
+}
+#main {
+  width: 620px;
+}
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.x.axis path {
+  display: none;
+}
+.line {
+  fill: none;
+  stroke: steelblue;
+  /*stroke-width: 1.5px;*/
+}
+div.tooltip {
+  /*line-height: 1;*/
+  text-align: center;
+  /*font-weight: bold;*/
+  position: absolute;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border: 0px;
+  border-radius: 2px;
+  pointer-events: none;
+}
+.y line {
+  opacity: .8;
+  stroke: #d3d3d3;
+}
+</style>
+
+<link rel="stylesheet" href="style/slider.css">
+
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="scripts/libraries/dimple.js"></script>
+<script src="scripts/libraries/underscore.js"></script>
+
+
+
+<body>
+  <div id="main">
+
+    <button onclick="adapt()">Click me</button>
+    <h4>Net Changes since 1991</h4>
+    <div id="chartContainer2"></div>
+    <div id="slider"></div>
+    <div id="icons"></div>
+  </div>
+
+</body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="scripts/libraries/slider.js"></script>
+<script src="scripts/libraries/sticker.js"></script>
+<script src="scripts/libraries/dimple.js"></script>
+<script type="text/javascript">
+var div = d3.select("body").append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0);
+
+var data = [{
+  "date": 1991,
+  "housing units": 345630,
+  "employment": 558990,
+  "population": 729.708
+}, {
+  "date": 1992,
+  "housing units": 346355,
+  "employment": 545721,
+  "population": 734.861
+}, {
+  "date": 1993,
+  "housing units": 346643,
+  "employment": 549716,
+  "population": 740.277
+}, {
+  "date": 1994,
+  "housing units": 347829,
+  "employment": 573011,
+  "population": 742.316
+}, {
+  "date": 1995,
+  "housing units": 348230,
+  "employment": 556401,
+  "population": 746.386
+}, {
+  "date": 1996,
+  "housing units": 348913,
+  "employment": 536304,
+  "population": 753.934
+}, {
+  "date": 1997,
+  "housing units": 349638,
+  "employment": 524940,
+  "population": 762.953
+}, {
+  "date": 1998,
+  "housing units": 350512,
+  "employment": 520434,
+  "population": 770.262
+}, {
+  "date": 1999,
+  "housing units": 351797,
+  "employment": 532908,
+  "population": 774.716
+}, {
+  "date": 2000,
+  "housing units": 353594,
+  "employment": 547304,
+  "population": 777.340
+}, {
+  "date": 2001,
+  "housing units": 355373,
+  "employment": 586085,
+  "population": 784.677
+}, {
+  "date": 2002,
+  "housing units": 357781,
+  "employment": 611676,
+  "population": 779.447
+}, {
+  "date": 2003,
+  "housing units": 360277,
+  "employment": 591192,
+  "population": 775.663
+}, {
+  "date": 2004,
+  "housing units": 361764,
+  "employment": 575340,
+  "population": 773.556
+}, {
+  "date": 2005,
+  "housing units": 363619,
+  "employment": 554574,
+  "population": 777.835
+}, {
+  "date": 2006,
+  "housing units": 365533,
+  "employment": 542721,
+  "population": 786.187
+}, {
+  "date": 2007,
+  "housing units": 368100,
+  "employment": 528833,
+  "population": 799.185
+}, {
+  "date": 2008,
+  "housing units": 371363,
+  "employment": 525870,
+  "population": 807.904
+}, {
+  "date": 2009,
+  "housing units": 374817,
+  "employment": 531539,
+  "population": 815.184
+}, {
+  "date": 2010,
+  "housing units": 376047,
+  "employment": 536833,
+  "population": 805.607
+}, {
+  "date": 2011,
+  "housing units": 376316,
+  "employment": 571191,
+  "population": 814.233
+}];
+
+var margin = {
+  top: 80,
+  right: 120,
+  bottom: 30,
+  left: 50
+},
+  width = 620 - margin.left - margin.right,
+  height = 450 - margin.top - margin.bottom;
+
+var parseDate = d3.time.format("%Y").parse;
+
+var formatTime = d3.time.format("%Y");
+
+var format = d3.format("s");
+
+var format2 = d3.format(",g")
+
+var x = d3.time.scale()
+  .range([0, width]);
+
+var y = d3.scale.linear()
+  .range([height, 0]);
+
+var color = d3.scale.ordinal()
+  .range(["#d39651", "#80b1d3", "#fb8072"]);
+
+var xAxis = d3.svg.axis()
+  .scale(x)
+  .orient("bottom")
+
+var yAxis = d3.svg.axis()
+  .scale(y)
+  .orient("left")
+  .tickFormat(format)
+  .tickSize(-width, 0, 0)
+
+var line = d3.svg.line()
+// .interpolate("basis")
+.x(function(d) {
+  return x(d.date);
+})
+  .y(function(d) {
+    return y(d[which]);
+  });
+
+var which = "change";
+
+var svg = d3.select("body").append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+color.domain(d3.keys(data[0]).filter(function(key) {
+  return key !== "date";
+}));
+
+data.forEach(function(d) {
+  d.date = parseDate(new String(d.date));
+  d.population = +d.population * 1000
+});
+
+var metrics = color.domain().map(function(name) {
+  return {
+    name: name,
+    values: data.map(function(d, i) {
+      return {
+        date: d.date,
+        abs: +d[name],
+      };
+    })
+  };
+});
+
+metrics.forEach(function(name) {
+  var f = name.values
+  f.forEach(function(d, i) {
+    d.change = d.abs - f[0].abs;
+  });
+});
+
+x.domain(d3.extent(data, function(d) {
+  return d.date;
+}));
+
+y.domain([
+  d3.min(metrics, function(c) {
+    return d3.min(c.values, function(v) {
+      return v[which];
+    });
+  }),
+  d3.max(metrics, function(c) {
+    return d3.max(c.values, function(v) {
+      return v[which];
+    });
+  })
+]);
+
+svg.append("g")
+  .attr("class", "x axis")
+  .attr("transform", "translate(0," + height + ")")
+  .call(xAxis);
+
+svg.append("g")
+  .attr("class", "y axis")
+  .call(yAxis)
+// .append("text")
+//   .attr("transform", "rotate(-90)")
+//   .attr("y", 6)
+//   .attr("dy", ".71em")
+//   .style("text-anchor", "end")
+//   .text("Temperature (ºF)");
+
+var bisect = d3.bisector(function(d) {
+  return d.date;
+}).right;
+
+
+var metric = svg.selectAll(".metric")
+  .data(metrics)
+  .enter().append("g")
+  .attr("class", "metric");
+
+metric.append("path")
+  .attr("class", "line")
+  .attr("stroke-width", "1.5px")
+  .attr("d", function(d) {
+    return line(d.values);
+  })
+  .style("stroke", function(d) {
+    return color(d.name);
+  });
+
+var metricsInvisible = metric.append("path")
+  .attr("class", "line metrics-invisible")
+  .attr("d", function(d) {
+    return line(d.values);
+  })
+  .attr("stroke-width", "30px")
+  .attr("opacity", 0)
+// .style("pointer-events","none");
+
+
+// var legend = svg.selectAll(".legend")
+//     .data(color.domain())
+//   .enter().append("g")
+//     .attr("class", "legend")
+//     .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+// legend.append("rect")
+//     .attr("x", 5)
+//     .attr("width", 18)
+//     .attr("height", 18)
+//     .style("fill", color);
+
+// legend.append("text")
+//     .attr("x", 25)
+//     .attr("y", 9)
+//     .attr("dy", ".35em")
+//     .style("text-anchor", "start")
+//     .text(function(d) { return d; });
+
+
+var labels = metric.append("text")
+  .datum(function(d) {
+    return {
+      name: d.name,
+      value: d.values[d.values.length - 1]
+    };
+  })
+  .attr("transform", function(d) {
+    return "translate(" + x(d.value.date) + "," + y(d.value[which]) + ")";
+  })
+  .attr("x", "-1.5em")
+  .attr("dy", "-.35em")
+  .text(function(d) {
+    return d.name;
+  });
+
+metricsInvisible
+  .on('mousemove', function(d) {
+    // console.log(x.invert(d3.mouse(this)[0]));
+    var q = d3.time.year.round(x.invert(d3.mouse(this)[0]));
+    // console.log(q.getFulldate())
+
+    var c = d.values.filter(function(v) {
+      return v.date.getFullYear() == q.getFullYear();
+    })[0];
+
+    div.transition()
+      .duration(200)
+      .style("opacity", .9);
+    div.html(formatTime(c.date) + "<br/>" + d.name + "<br/>" + "Change since 1991: " + format2(c[which]) + "<br/>" + "Total: " + format2(c.abs))
+      .style("left", (x(c.date) - 10) + "px")
+      .style("top", (y(c[which]) - 5) + "px");
+
+  })
+  .on("mouseout", function(d) {
+    div.transition()
+      .duration(500)
+      .style("opacity", 0);
+  });
+
+function adapt() {
+
+  which = (which == "abs") ? "change" : "abs"
+
+  y.domain([
+    d3.min(metrics, function(c) {
+      return d3.min(c.values, function(v) {
+        return v[which];
+      });
+    }),
+    d3.max(metrics, function(c) {
+      return d3.max(c.values, function(v) {
+        return v[which];
+      });
+    })
+  ]);
+
+  d3.select(".y.axis").transition().duration(250).call(yAxis);
+
+  labels
+    .transition()
+    .duration(500)
+    .attr("transform", function(d) {
+      return "translate(" + x(d.value.date) + "," + y(d.value[which]) + ")";
+    });
+
+  metric.select("path").transition().duration(500).attr("d", function(d) {
+    return line(d.values);
+  });
+
+  metricsInvisible.transition().duration(500).attr("d", function(d) {
+    return line(d.values);
+  });
+
+
+
+}
+</script>
