@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 <link href='http://fonts.googleapis.com/css?family=Fenix' rel='stylesheet' type='text/css'>
 <style>
 body {
   font-family: Fenix, serif;
-  font-size: 11;
+  font-size: 14;
 }
 h4 {
   margin-bottom: 0px;
@@ -30,18 +31,26 @@ div.tooltip {
   /*line-height: 1;*/
   text-align: center;
   /*font-weight: bold;*/
-  position: absolute;
+  /*position: absolute;*/
   padding: 12px;
   background: rgba(0, 0, 0, 0.8);
   color: #fff;
   border: 0px;
   border-radius: 2px;
   pointer-events: none;
+  font-size: 16px;
+  margin-top: 50px;
 }
 .y line {
   opacity: .8;
   stroke: #d3d3d3;
 }
+#button{
+  position: absolute;
+  left: 410px;
+  top: 10px;
+}
+
 </style>
 
 <link rel="stylesheet" href="style/slider.css">
@@ -55,8 +64,10 @@ div.tooltip {
 <body>
   <div id="main">
 
-    <button onclick="adapt()">Click me</button>
-    <h4>Net Changes since 1991</h4>
+    <button id = "button" type="button" onclick="adapt()" class="btn-info btn ">Change Since 1991</button>
+    <h4>Growth in San Francisco</h4>
+    <div id="chartContainer1"></div>
+    <h4>Rent on a 2-Bedroom Apartment</h4>
     <div id="chartContainer2"></div>
     <div id="slider"></div>
     <div id="icons"></div>
@@ -179,8 +190,76 @@ var data = [{
   "population": 814.233
 }];
 
+var data2 = [{
+  "date": 1991,
+  "rent": 1000
+}, {
+  "date": 1992,
+  "rent": 990
+}, {
+  "date": 1993,
+  "rent": 965
+}, {
+  "date": 1994,
+  "rent": 1050
+}, {
+  "date": 1995,
+  "rent": 1100
+}, {
+  "date": 1996,
+  "rent": 1350
+}, {
+  "date": 1997,
+  "rent": 1600
+}, {
+  "date": 1998,
+  "rent": 2000
+}, {
+  "date": 1999,
+  "rent": 1995
+}, {
+  "date": 2000,
+  "rent": 2100
+}, {
+  "date": 2001,
+  "rent": 2400
+}, {
+  "date": 2002,
+  "rent": null
+}, {
+  "date": 2003,
+  "rent": null
+}, {
+  "date": 2004,
+  "rent": null
+}, {
+  "date": 2005,
+  "rent": null
+}, {
+  "date": 2006,
+  "rent": null
+}, {
+  "date": 2007,
+  "rent": null
+}, {
+  "date": 2008,
+  "rent": null
+}, {
+  "date": 2009,
+  "rent": null
+}, {
+  "date": 2010,
+  "rent": 3268.1818181818
+}, {
+  "date": 2011,
+  "rent": 3187.5
+}, {
+  "date": 2012,
+  "rent": 3689.1666666667
+}];
+
 var margin = {
-  top: 80,
+  top: 40,
   right: 120,
   bottom: 30,
   left: 50
@@ -226,7 +305,7 @@ var line = d3.svg.line()
 
 var which = "change";
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#chartContainer1").append("svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -240,6 +319,13 @@ data.forEach(function(d) {
   d.date = parseDate(new String(d.date));
   d.population = +d.population * 1000
 });
+
+data2.forEach(function(d, i) {
+  d.date = parseDate(new String(d.date));
+  d.change = (d.rent!= null) ? d.rent - data2[0].rent : null;
+  d.abs = d.rent;
+});
+
 
 var metrics = color.domain().map(function(name) {
   return {
@@ -260,7 +346,7 @@ metrics.forEach(function(name) {
   });
 });
 
-x.domain(d3.extent(data, function(d) {
+x.domain(d3.extent(data2, function(d) {
   return d.date;
 }));
 
@@ -277,25 +363,23 @@ y.domain([
   })
 ]);
 
+
+
 svg.append("g")
   .attr("class", "x axis")
   .attr("transform", "translate(0," + height + ")")
   .call(xAxis);
 
-svg.append("g")
+var gYAxis = svg.append("g")
   .attr("class", "y axis")
   .call(yAxis)
-// .append("text")
-//   .attr("transform", "rotate(-90)")
-//   .attr("y", 6)
-//   .attr("dy", ".71em")
-//   .style("text-anchor", "end")
-//   .text("Temperature (ºF)");
+
+
+
 
 var bisect = d3.bisector(function(d) {
   return d.date;
 }).right;
-
 
 var metric = svg.selectAll(".metric")
   .data(metrics)
@@ -319,28 +403,6 @@ var metricsInvisible = metric.append("path")
   })
   .attr("stroke-width", "30px")
   .attr("opacity", 0)
-// .style("pointer-events","none");
-
-
-// var legend = svg.selectAll(".legend")
-//     .data(color.domain())
-//   .enter().append("g")
-//     .attr("class", "legend")
-//     .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-// legend.append("rect")
-//     .attr("x", 5)
-//     .attr("width", 18)
-//     .attr("height", 18)
-//     .style("fill", color);
-
-// legend.append("text")
-//     .attr("x", 25)
-//     .attr("y", 9)
-//     .attr("dy", ".35em")
-//     .style("text-anchor", "start")
-//     .text(function(d) { return d; });
-
 
 var labels = metric.append("text")
   .datum(function(d) {
@@ -360,9 +422,7 @@ var labels = metric.append("text")
 
 metricsInvisible
   .on('mousemove', function(d) {
-    // console.log(x.invert(d3.mouse(this)[0]));
     var q = d3.time.year.round(x.invert(d3.mouse(this)[0]));
-    // console.log(q.getFulldate())
 
     var c = d.values.filter(function(v) {
       return v.date.getFullYear() == q.getFullYear();
@@ -371,9 +431,9 @@ metricsInvisible
     div.transition()
       .duration(200)
       .style("opacity", .9);
-    div.html(formatTime(c.date) + "<br/>" + d.name + "<br/>" + "Change since 1991: " + format2(c[which]) + "<br/>" + "Total: " + format2(c.abs))
+    div.html(formatTime(c.date) + ": " + d.name + "<br/>" + "Change since 1991: " + format2(c[which]) + "<br/>" + "Total: " + format2(c.abs))
       .style("left", (x(c.date) - 10) + "px")
-      .style("top", (y(c[which]) - 5) + "px");
+      .style("top", (y(c[which]) - 25) + "px");
 
   })
   .on("mouseout", function(d) {
@@ -385,6 +445,10 @@ metricsInvisible
 function adapt() {
 
   which = (which == "abs") ? "change" : "abs"
+
+  d3.select("button").html(function(d){
+    return (which == "abs") ? "Absolute Levels" : "Change Since 1991"
+  })
 
   y.domain([
     d3.min(metrics, function(c) {
@@ -399,7 +463,12 @@ function adapt() {
     })
   ]);
 
-  d3.select(".y.axis").transition().duration(250).call(yAxis);
+  // y2.domain(d3.extent(data2.map(function(d) {
+  //   return d[which];
+  // })));
+
+  gYAxis.transition().duration(250).call(yAxis);
+  gYAxis2.transition().duration(250).call(yAxis2);
 
   labels
     .transition()
@@ -416,7 +485,65 @@ function adapt() {
     return line(d.values);
   });
 
+  // d3.selectAll(".rentLine").transition().duration(450).attr("d", line2);
 
+} //end adapt()
 
-}
+var height2 = height * 0.5
+var svg2 = d3.select("#chartContainer2").append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height2  + margin.top*0.5 + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top*0.5  + ")");
+
+var y2 = d3.scale.linear()
+  .range([height2, 0])
+
+y2.domain([0, d3.max(data2.map(function(d) {
+  return d.abs;
+}))]);
+
+var yAxis2 = d3.svg.axis()
+  .scale(y2)
+  .orient("left")
+  .ticks(8)
+  .tickFormat(d3.format("$,g"))
+  .tickSize(-width, 0, 0)
+
+var line2 = d3.svg.line()
+  .x(function(d) {
+    return x(d.date);
+  })
+  .y(function(d) {
+    return y2(d.abs);
+  });
+
+var gYAxis2 = svg2.append("g")
+  .attr("class", "y axis rent")
+  // .attr("transform", "translate(" + width + ",0)")
+  .call(yAxis2)
+
+var rentLine1 = svg2.append("g")
+    .datum(data2.slice(0,11))
+    .append("path")
+    .attr("class", "rentLine")
+    .attr("fill", "none")
+    .attr("stroke", "black")
+    .attr("stroke-width", "1.5px")
+    .attr("d", line2);
+
+var rentLine2 = svg2.append("g")
+    .datum(data2.slice(19))
+    .append("path")
+    .attr("class", "rentLine")
+    .attr("fill", "none")
+    .attr("stroke", "black")
+    .attr("stroke-width", "1.5px")
+    .attr("d", line2);
+
+svg2.append("g")
+  .attr("class", "x axis")
+  .attr("transform", "translate(0," + height2 + ")")
+  .call(xAxis);
+
 </script>
