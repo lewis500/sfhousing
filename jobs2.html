@@ -58,7 +58,7 @@ div.tooltip {
 #button {
   position: absolute;
   left: 250px;
-  top: 30px;
+  top: 55px;
 }
 </style>
 
@@ -71,10 +71,9 @@ div.tooltip {
 
 
 <body>
+  <div style="width: 620px"><h4>San Francisco Housing, Jobs and Population Numbers, 1991-2012</h4></div>
   <div id="main">
-    <button id="button" type="button" onclick="adapt()" class="btn-info btn ">Change Since 1991</button>
-    <h4>San Francisco Housing, Jobs and Population</h4>
-    <div id="chartContainer1"></div>
+    <div id="chartContainer1"><button id="button" type="button" onclick="adapt()" class="btn-info btn ">Change Since 1991</button></div>
     <div id="slider"></div>
     <div id="icons"></div>
     <div style="text-align: right">
@@ -543,7 +542,7 @@ metricsInvisible
     div.transition()
       .duration(100)
       .style("opacity", .8);
-    div.html( "<span>" + d.name +  "</span></br>" + "Year: " + formatTime(c.date) + "<br/>" + "&Delta;: " + format2(c.change) + " " + units[d.name] + "<br/>" + "Total: " + format2(c.abs) + " " + units[d.name])
+    div.html( "<span>" + d.name +  "</span></br>" + "Year: " + formatTime(c.date) + "<br/>" + "&Delta; since 1991: " + format2(c.change) + " " + units[d.name] + "<br/>" + "Total: " + format2(c.abs) + " " + units[d.name])
       .style("background",function(){ return d3.rgb(color(d.name)).darker(.5); })
       .style("left", l + "px")
       .style("top", top + "px");
@@ -661,6 +660,8 @@ var svg2 = d3.select("#icons").append("svg")
       return "scale(" + scale(d.values[0][which]) + ")";
     },
   });
+
+  slide(null,1991)
 
 function slide(event, year) {
 
