@@ -625,9 +625,9 @@ balls.append("circle")
 
 d3.select("#slider")
   .style({
-    width: 505 + "px",
+    width: width + "px",
     "margin-top": 5 + "px",
-    "margin-left": 70 + "px",
+    "margin-left": margin.left + "px",
   });
 
 var sliderCall = d3.slider().max(2011).min(1991).step(1).on("slide", slide);
