@@ -70,7 +70,7 @@ div.tooltip {
 <body>
   <div id="main">
     <button id="button" type="button" onclick="adapt()" class="btn-info btn ">Change Since 1991</button>
-    <h4>Growth in San Francisco</h4>
+    <h4>San Francisco Housing, Jobs and Population</h4>
     <div id="chartContainer1"></div>
     <div id="slider"></div>
     <div id="icons"></div>
@@ -336,6 +336,12 @@ div.tooltip {
       "Housing Units": 376316,
       "Employment": 571191,
       "Population": 814.233
+    }
+      , {
+      "date": 2012,
+      "Housing Units": null,
+      "Employment": 586538,
+      "Population": 825.863
     }];
 
 
@@ -381,12 +387,15 @@ var yAxis = d3.svg.axis()
 
 var line = d3.svg.line()
 // .interpolate("basis")
+.defined(function(d) { return d[which] != null; })
 .x(function(d) {
   return x(d.date);
 })
   .y(function(d) {
     return y(d[which]);
   });
+
+// line.defined(function(d) { return d != null; })
 
 var which = "change";
 
@@ -407,16 +416,13 @@ data.forEach(function(d) {
   d.Population = +d.Population * 1000
 });
 
-
-
-
 var metrics = color.domain().map(function(name) {
   return {
     name: name,
     values: data.map(function(d, i) {
       return {
         date: d.date,
-        abs: +d[name],
+        abs: d[name],
       };
     })
   };
@@ -425,9 +431,12 @@ var metrics = color.domain().map(function(name) {
 metrics.forEach(function(name) {
   var f = name.values
   f.forEach(function(d, i) {
-    d.change = d.abs - f[0].abs;
+    d.change = (d.abs==null) ? null: d.abs - f[0].abs;
   });
+  // if(f[f.length-1].val == null) f = f.slice(0,f.length - 1)
 });
+
+metrics[0].values = metrics[0].values.slice(0, metrics[0].values.length -1)
 
 x.domain(d3.extent(data, function(d) {
   return d.date;
@@ -491,7 +500,9 @@ var labels = metric.append("text")
     };
   })
   .attr("transform", function(d) {
-    return "translate(" + x(d.value.date) + "," + y(d.value[which]) + ")";
+    var a = (d.name == "Housing Units") ? 15 : 0
+    var b = (d.name == "Employment") ? 15: 0
+    return "translate(" + (x(d.value.date) + a) + "," + (y(d.value[which]) + b) + ")";
   })
   .attr("x", "-1.5em")
   .attr("dy", "-.35em")
@@ -571,8 +582,10 @@ function adapt() {
     .transition()
     .duration(500)
     .attr("transform", function(d) {
-      return "translate(" + x(d.value.date) + "," + y(d.value[which]) + ")";
-    });
+      var a = (d.name == "Housing Units") ? 15 : 0;
+      var b = (d.name == "Employment") ? 15: 0;
+    return "translate(" + (x(d.value.date) + a) + "," + (y(d.value[which]) + b) + ")";
+    })
 
   metric.select("path").transition().duration(500).attr("d", function(d) {
     return line(d.values);
@@ -646,53 +659,6 @@ var svg2 = d3.select("#icons").append("svg")
     },
   });
 
-// var scale = d3.scale.sqrt().domain(y.domain()).range([.3, 2]);
-
-// var iconsG = svg2.append("g").attr("transform", "translate(" + [120, 50] + ")");
-
-// var iconsNames = ["#house", "#worker", "#people" ];
-
-// var icons = iconsG.selectAll("icons").data(metrics).enter().append("g").attr("class","overG")
-//   .attr("transform",function(d,i){
-//     return "translate(" + [i*170,0] + ")";
-//   });
-
-// var icons2 = iconsG.selectAll("icons").data(metrics).enter().append("g").attr("class","overG")
-//   .attr("transform",function(d,i){
-//     return "translate(" + [i*170,0] + ")";
-//   })
-//   .append("g")
-//     .attr("class","underGB")
-//     .each(function(d,i){
-//       return d3.sticker(iconsNames[i])(d3.select(this));
-//     })
-
-// var clips = icons.append("defs").append("svg:clipPath")
-//     .attr("id", function(d,i){
-//       return "clip" + i;
-//     });
-
-// var recs = clips.append("svg:rect")
-//     .attr("id", "clip-rect")
-//     .attr("y", 0)
-//     .attr("width", 45)
-//     .attr("height", 45);
-
-// var shapes = icons2.append("g")
-//   .attr("class","underG")
-//   .attr("clip-path", function(d,i){
-//     return "url(#clip" + i + ")"
-//   })
-//   .each(function(d,i){
-//     return d3.sticker(iconsNames[i])(d3.select(this));
-//   })
-
-//   shapes.attr("fill",function(d){
-//     return color(d.name);
-//   })
-
-// // shapes.attr("fill","#333")
-
 function slide(event, year) {
 
   bigYear = year
@@ -701,6 +667,7 @@ function slide(event, year) {
     .attr({
       transform: function(v) {
         var t = v.values.filter(function(d){ return d.date.getFullYear() == year; })[0];
+        if(t==null) t = v.values[v.values.length-1]
         return "translate(" + [x(t.date), y(t[which])] + ")";
       }
     });
@@ -709,6 +676,7 @@ function slide(event, year) {
   icons.selectAll(".underG").attr({
     transform: function(v){
      var t = v.values.filter(function(d){ return d.date.getFullYear() == year; })[0];
+     if(t==null) t = v.values[v.values.length-1]
       return "scale(" + scale(t[which]) + ")";
     }
   });
